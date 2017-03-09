@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BDVideoLibraryManagerXF.Views.LibraryPage"
+             xmlns:vm="clr-namespace:BDVideoLibraryManagerXF.ViewModels"
+             xmlns:vc="clr-namespace:BDVideoLibraryManagerXF.ValueConverters">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <vc:IsNotNullOrEmptyValueConverter x:Key="IsNotNullOrEmptyValueConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.BindingContext>
+        <vm:LibraryViewModel/>
+    </ContentPage.BindingContext>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="🔍" Clicked="Search_Toggle" />
+    </ContentPage.ToolbarItems>
+    <ContentPage.Content>
+        <StackLayout>
+            <StackLayout Orientation="Horizontal" IsVisible="{Binding SearchGenre, Converter={StaticResource IsNotNullOrEmptyValueConverter}}">
+                <Button Text="解除" Clicked="Clear_Genre" />
+                <Label Text="{Binding SearchGenre, StringFormat='ジャンル: {0}'}"  VerticalTextAlignment="Center" />
+            </StackLayout>
+            <SearchBar x:Name="SearchBar" Text="{Binding SearchWord}"  IsVisible="false" SearchCommand="{Binding SearchCommand}"/>
+            <ListView x:Name="LibraryListView"  VerticalOptions="FillAndExpand" IsPullToRefreshEnabled="true" ItemsSource="{Binding Library.Contents}" IsGroupingEnabled="True" GroupDisplayBinding="{Binding DiskName}"
+                  Refreshing="ListView_Refreshing" ItemSelected="OnItemSelected" IsRefreshing="{Binding IsBusy, Mode=OneWay}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                            <StackLayout Padding="10">
+                                <Label Text="{Binding ProgramTitle}"
+                       LineBreakMode="TailTruncation"
+                       Style="{DynamicResource ListItemTextStyle}"
+                       FontSize="Medium"/>
+                                <StackLayout Orientation="Horizontal">
+                                    <Label Text="{Binding Length, StringFormat=\{0:h\\:mm\\:ss\}}" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Small"/>
+                                    <Label Text="{Binding ProgramGenre}"
+                       LineBreakMode="NoWrap"
+                       Style="{DynamicResource ListItemDetailTextStyle}"
+                       FontSize="Small"/>
+                                </StackLayout>
+                            </StackLayout>
+                        </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

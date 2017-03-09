@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BDVideoLibraryManagerXF.Views.VideoDetailPage"
+             >
+    <ScrollView>
+        <StackLayout Spacing="20" Padding="15">
+            <Label Text="{Binding Video.ProgramTitle}" Style="{DynamicResource ListItemTextStyle}" FontSize="Medium"/>
+            <Label Text="{Binding Video.RecordDateTime, StringFormat='{0:yyyy年MM月dd日 HH:mm:ss}'}" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Small"/>
+            <Label Text="{Binding Video.Length, StringFormat=\{0:h\\:mm\\:ss\}}" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Small"/>
+            <Label Text="{Binding Video.ProgramGenre}" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Small"/>
+            <StackLayout Orientation="Horizontal" >
+                <Label Text="{Binding Video.ChannelNumber, StringFormat='Ch.{0}'}" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Small"/>
+                <Label Text="{Binding Video.ChannelName}" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Small"/>
+            </StackLayout>
+            <Label Text="{Binding Disk.DiskName, StringFormat='ディスク番号:{0}'}" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Small"/>
+            <Label Text="{Binding Video.ProgramDetail}" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Small"/>
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             Title="Setting "
+             x:Class="BDVideoLibraryManagerXF.Views.SettingPage">
+    <StackLayout Padding="10">
+        <Label Text="サーバー名"/>
+        <Entry x:Name="Label_Smb_Name" />
+        <Label Text="ユーザー名"/>
+        <Entry x:Name="Label_Smb_User" />
+        <Label Text="パスワード"/>
+        <Entry x:Name="Label_Smb_Password" IsPassword="True" />
+        <Label Text="パス"/>
+        <Entry x:Name="Label_Smb_Path" />
+        <Button Text="保存" Clicked="Button_Clicked"/>
+    </StackLayout>
+</ContentPage>
