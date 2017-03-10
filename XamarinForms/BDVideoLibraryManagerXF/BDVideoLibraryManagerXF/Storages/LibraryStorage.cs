@@ -10,7 +10,7 @@ namespace BDVideoLibraryManagerXF.Storages
 {
     public static class LibraryStorage
     {
-        public static Library Library { get; set; }
+        public static Library Library { get; private set; }
         private static bool Copying { get; set; }
 
         public static async Task<Library> GetLocalData()

@@ -16,7 +16,11 @@ namespace BDVideoLibraryManagerXF.ValueConverters
             {
                 return ! string.IsNullOrEmpty(value as string);
             }
-            return false;
+            if (value == null)
+            {
+                return false;
+            }
+            return true;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

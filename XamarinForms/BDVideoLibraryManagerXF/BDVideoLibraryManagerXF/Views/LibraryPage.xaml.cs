@@ -16,6 +16,8 @@ namespace BDVideoLibraryManagerXF.Views
 
         public string TargetGenre { get { return ViewModel.SearchGenre; } set { ViewModel.SearchGenre = value; } }
 
+        public VideoLibraryManagerCommon.Library.DiskBD TargetDisc { get { return ViewModel.TargetDisc; } set { ViewModel.TargetDisc = value; } }
+
         public LibraryPage()
         {
             InitializeComponent();
@@ -75,9 +77,10 @@ namespace BDVideoLibraryManagerXF.Views
             SearchBar.IsVisible = !SearchBar.IsVisible;
         }
 
-        private void Clear_Genre(object sender, EventArgs e)
+        private void Clear_Option(object sender, EventArgs e)
         {
             ViewModel.SearchGenre = null;
+            ViewModel.TargetDisc = null;
         }
 
         async void OnItemSelected(object sender, SelectedItemChangedEventArgs args)

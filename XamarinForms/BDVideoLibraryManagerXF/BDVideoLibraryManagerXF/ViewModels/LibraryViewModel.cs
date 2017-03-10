@@ -18,7 +18,7 @@ namespace BDVideoLibraryManagerXF.ViewModels
         public Library FullLibrary { get { return _FullLibrary; } set { _FullLibrary = value; OnPropertyChanged(nameof(Library)); } }
         private Library _FullLibrary = new Library(new DiskBD[0]);
 
-        public Library Library { get { IsBusy = true;  var result= Search(FullLibrary, SearchWord,SearchGenre);IsBusy = false;return result; } }
+        public Library Library { get { IsBusy = true;  var result= Search(FullLibrary, SearchWord,SearchGenre,TargetDisc);IsBusy = false;return result; } }
 
         public string SearchWord { get { return _SearchWord; } set { _SearchWord = value;OnPropertyChanged(nameof(SearchWord)); if (value == null || value == "") OnPropertyChanged(nameof(Library)); } }
         private string _SearchWord;
@@ -26,14 +26,21 @@ namespace BDVideoLibraryManagerXF.ViewModels
         public string SearchGenre { get { return _SearchGenre; } set { _SearchGenre = value; OnPropertyChanged(nameof(SearchGenre)); OnPropertyChanged(nameof(Library)); } }
         private string _SearchGenre="";
 
+        public DiskBD TargetDisc { get { return _TargetDisc; }set { _TargetDisc = value; OnPropertyChanged(nameof(TargetDisc)); OnPropertyChanged(nameof(Library)); } }
+        private DiskBD _TargetDisc;
+
         public System.Windows.Input.ICommand SearchCommand { get { return _SearchCommand ?? (_SearchCommand = new DelegateCommand((o) => true, (o) => OnPropertyChanged(nameof(Library)))); } }
         private System.Windows.Input.ICommand _SearchCommand;
 
         public bool IsBusy { get { return _IsBusy; }set { _IsBusy = value;OnPropertyChanged(nameof(IsBusy)); } }
         private bool _IsBusy;
 
-        static private Library Search(Library lib, string word,string genre)
+        static private Library Search(Library lib, string word,string genre,DiskBD TargetDisk)
         {
+            if (TargetDisk != null)
+            {
+                lib = new Library(new DiskBD[] { TargetDisk });
+            }
             if (string.IsNullOrEmpty(word) && (string.IsNullOrEmpty(genre))) return lib;
             var result = new Queue<DiskBD>();
             foreach(var item in lib.Contents)
