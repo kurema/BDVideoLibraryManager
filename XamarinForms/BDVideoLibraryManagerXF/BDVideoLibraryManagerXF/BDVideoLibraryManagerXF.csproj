@@ -65,6 +65,9 @@
     <Compile Include="Views\VideoDetailPage.xaml.cs">
       <DependentUpon>VideoDetailPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\VideosDetailPage.xaml.cs">
+      <DependentUpon>VideosDetailPage.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="App.xaml">
@@ -119,6 +122,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Views\TopPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Views\VideosDetailPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>

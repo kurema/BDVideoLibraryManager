@@ -30,6 +30,8 @@ namespace BDVideoLibraryManagerXF.Views
             var lp = new LibraryPage();
             lp.TargetGenre = item;
             await Navigation.PushAsync(lp);
+
+            listViewGenre.SelectedItem = null;
         }
     }
 }

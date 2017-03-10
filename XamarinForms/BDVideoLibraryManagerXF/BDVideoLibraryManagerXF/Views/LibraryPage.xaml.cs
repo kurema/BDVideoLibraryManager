@@ -88,22 +88,35 @@ namespace BDVideoLibraryManagerXF.Views
             if (item == null)
                 return;
 
+            int maxVideoCount = 50;
 
-            VideoLibraryManagerCommon.Library.DiskBD result = new VideoLibraryManagerCommon.Library.DiskBD();
+            VideoLibraryManagerCommon.Library.DiskVideoPair result = null;
+            var list = new VideoLibraryManagerCommon.Library.DiskVideoPairList();
             if(this.BindingContext is ViewModels.LibraryViewModel)
             {
                 var bd = this.BindingContext as ViewModels.LibraryViewModel;
                 foreach(var disk in bd.Library.Contents)
                 {
-                    if (disk.Contents.Contains(item))
+                    foreach (var video in disk.Contents)
                     {
-                        result = disk;
-                        break;
+                        var temp = new VideoLibraryManagerCommon.Library.DiskVideoPair(disk, video);
+                        if (video == item)
+                        {
+                            result = temp;
+                        }
+                        list.Add(temp);
                     }
                 }
             }
 
-            await Navigation.PushAsync(new VideoDetailPage(new VideoLibraryManagerCommon.Library.DiskVideoPair(result,item)));
+            if (list.Count() > maxVideoCount)
+            {
+                await Navigation.PushAsync(new VideoDetailPage(result));
+            }
+            else
+            {
+                await Navigation.PushAsync(new VideosDetailPage(list, result));
+            }
 
             // Manually deselect item
             LibraryListView.SelectedItem = null;

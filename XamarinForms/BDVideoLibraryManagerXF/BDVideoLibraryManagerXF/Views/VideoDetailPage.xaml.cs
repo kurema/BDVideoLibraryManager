@@ -20,5 +20,9 @@ namespace BDVideoLibraryManagerXF.Views
             this.BindingContext = Video;
         }
 
+        public VideoDetailPage()
+        {
+            InitializeComponent();
+        }
     }
 }
