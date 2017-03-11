@@ -6,8 +6,8 @@
         <ListView.ItemTemplate>
             <DataTemplate>
                 <ViewCell>
-                    <StackLayout Padding="10">
-                        <Label Text="{Binding}"/>
+                    <StackLayout Padding="10" VerticalOptions="CenterAndExpand">
+                        <Label Text="{Binding}" Style="{DynamicResource ListItemTextStyle}" FontSize="Medium"  VerticalTextAlignment="Center"/>
                     </StackLayout>
                 </ViewCell>
             </DataTemplate>

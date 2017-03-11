@@ -26,20 +26,35 @@
                 <Label Text="{Binding TargetDisc.DiskName, StringFormat='ディスク: {0}'}"  VerticalTextAlignment="Center" />
             </StackLayout>
             <SearchBar x:Name="SearchBar" Text="{Binding SearchWord}"  IsVisible="false" SearchCommand="{Binding SearchCommand}"/>
-            <ListView x:Name="LibraryListView"  VerticalOptions="FillAndExpand" IsPullToRefreshEnabled="true" ItemsSource="{Binding Library.Contents}" IsGroupingEnabled="True" GroupDisplayBinding="{Binding DiskName}"
+            <ListView x:Name="LibraryListView"  VerticalOptions="FillAndExpand" IsPullToRefreshEnabled="true" ItemsSource="{Binding Library.Contents}" IsGroupingEnabled="True" GroupDisplayBinding="{Binding}"
                   Refreshing="ListView_Refreshing" ItemSelected="OnItemSelected" IsRefreshing="{Binding IsBusy, Mode=OneWay}">
+                <ListView.GroupHeaderTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid Padding="15,0,15,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Column="0" Text="{Binding DiskName}" VerticalOptions="CenterAndExpand"/>
+                                <Label Grid.Column="1" Text="{Binding DiskTitle}" VerticalOptions="CenterAndExpand"/>
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.GroupHeaderTemplate>
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <StackLayout Padding="5" VerticalOptions="Center">
+                            <StackLayout Padding="10,5,10,5" VerticalOptions="Center">
                                 <Label Text="{Binding ProgramTitle}" LineBreakMode="TailTruncation" Style="{DynamicResource ListItemTextStyle}" FontSize="Medium"/>
-                                <ScrollView Orientation="Horizontal">
-
-                                    <StackLayout Orientation="Horizontal">
-                                        <Label Text="{Binding Length, StringFormat=\{0:h\\:mm\\:ss\}}" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Small" LineBreakMode="NoWrap"/>
-                                        <Label Text="{Binding ProgramGenre}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Small"/>
-                                    </StackLayout>
-                                </ScrollView>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Label Grid.Column="0" Text="{Binding Length, StringFormat=\{0:h\\:mm\\:ss\}}" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Small" LineBreakMode="NoWrap"/>
+                                    <Label Grid.Column="1" Text="{Binding ProgramGenre}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Small"/>
+                                </Grid>
                             </StackLayout>
                         </ViewCell>
                     </DataTemplate>
