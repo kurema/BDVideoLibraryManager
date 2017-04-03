@@ -1,4 +1,6 @@
 # BDVideoLibraryManager
+## Access
+[Androidアプリ](https://play.google.com/store/apps/details?id=com.github.kurema.BDVideoLibraryManager)
 ## about
 このツールは以下の3つの機能を含みます。
 * BD-AV形式のBlu-ray Discに含まれる録画内容をディスク毎にcsv化するツール。
