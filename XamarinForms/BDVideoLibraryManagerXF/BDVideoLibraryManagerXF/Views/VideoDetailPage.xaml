@@ -5,19 +5,19 @@
              >
     <ScrollView>
         <StackLayout Spacing="20" Padding="15">
-            <Label Text="{Binding Video.ProgramTitle}" Style="{DynamicResource ListItemTextStyle}" FontSize="Medium"/>
-            <Label Text="{Binding Video.RecordDateTime, StringFormat='{0:yyyy年MM月dd日 HH:mm:ss}'}" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Small"/>
-            <Label Text="{Binding Video.Length, StringFormat=\{0:h\\:mm\\:ss\}}" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Small"/>
-            <Label Text="{Binding Video.ProgramGenre}" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Small"/>
+            <Label Text="{Binding Video.ProgramTitle}" Style="{DynamicResource ListItemTextStyle}" TextColor="Black" FontSize="Medium"/>
+            <Label Text="{Binding Video.RecordDateTime, StringFormat='{0:yyyy年MM月dd日 HH:mm:ss}'}" TextColor="Black" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Small"/>
+            <Label Text="{Binding Video.Length, StringFormat=\{0:h\\:mm\\:ss\}}" TextColor="Black" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Small"/>
+            <Label Text="{Binding Video.ProgramGenre}" Style="{DynamicResource ListItemDetailTextStyle}" TextColor="Black" FontSize="Small"/>
             <StackLayout Orientation="Horizontal" >
-                <Label Text="{Binding Video.ChannelNumber, StringFormat='Ch.{0}'}" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Small"/>
-                <Label Text="{Binding Video.ChannelName}" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Small"/>
+                <Label Text="{Binding Video.ChannelNumber, StringFormat='Ch.{0}'}" TextColor="Black" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Small"/>
+                <Label Text="{Binding Video.ChannelName}" Style="{DynamicResource ListItemDetailTextStyle}" TextColor="Black" FontSize="Small"/>
             </StackLayout>
             <StackLayout Orientation="Horizontal" >
                 <Button Text="選択" Clicked="Select_Disc" />
-                <Label Text="{Binding Disk.DiskName, StringFormat='ディスク番号:{0}'}" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Small" VerticalTextAlignment="Center"/>
+                <Label Text="{Binding Disk.DiskName, StringFormat='ディスク番号:{0}'}" Style="{DynamicResource ListItemDetailTextStyle}" TextColor="Black" FontSize="Small" VerticalTextAlignment="Center"/>
             </StackLayout>
-            <Label Text="{Binding Video.ProgramDetail}" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Small"/>
+            <Label Text="{Binding Video.ProgramDetail}" Style="{DynamicResource ListItemDetailTextStyle}" TextColor="Black" FontSize="Small"/>
         </StackLayout>
     </ScrollView>
 </ContentPage>

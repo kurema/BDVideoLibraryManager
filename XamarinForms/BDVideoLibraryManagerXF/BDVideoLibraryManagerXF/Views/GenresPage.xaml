@@ -7,7 +7,7 @@
             <DataTemplate>
                 <ViewCell>
                     <StackLayout Padding="10" VerticalOptions="CenterAndExpand">
-                        <Label Text="{Binding}" Style="{DynamicResource ListItemTextStyle}" FontSize="Medium"  VerticalTextAlignment="Center"/>
+                        <Label Text="{Binding}" Style="{DynamicResource ListItemTextStyle}" TextColor="Black" FontSize="Medium"  VerticalTextAlignment="Center"/>
                     </StackLayout>
                 </ViewCell>
             </DataTemplate>

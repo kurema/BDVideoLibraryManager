@@ -4,13 +4,13 @@
              Title="Setting "
              x:Class="BDVideoLibraryManagerXF.Views.SettingPage">
     <StackLayout Padding="10">
-        <Label Text="サーバー名"/>
+        <Label Text="サーバー名" TextColor="Black"/>
         <Entry x:Name="Label_Smb_Name" />
-        <Label Text="ユーザー名"/>
+        <Label Text="ユーザー名" TextColor="Black"/>
         <Entry x:Name="Label_Smb_User" />
-        <Label Text="パスワード"/>
+        <Label Text="パスワード" TextColor="Black"/>
         <Entry x:Name="Label_Smb_Password" IsPassword="True" />
-        <Label Text="パス"/>
+        <Label Text="パス" TextColor="Black"/>
         <Entry x:Name="Label_Smb_Path" />
         <Button Text="保存" Clicked="Button_Clicked"/>
     </StackLayout>

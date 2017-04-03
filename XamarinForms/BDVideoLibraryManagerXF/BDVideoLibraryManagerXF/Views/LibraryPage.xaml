@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="BDVideoLibraryManagerXF.Views.LibraryPage"
              xmlns:vm="clr-namespace:BDVideoLibraryManagerXF.ViewModels"
-             xmlns:vc="clr-namespace:BDVideoLibraryManagerXF.ValueConverters">
+             xmlns:vc="clr-namespace:BDVideoLibraryManagerXF.ValueConverters"
+             >
     <ContentPage.Resources>
         <ResourceDictionary>
             <vc:IsNotNullOrEmptyValueConverter x:Key="IsNotNullOrEmptyValueConverter" />
@@ -36,8 +37,8 @@
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
-                                <Label Grid.Column="0" Text="{Binding DiskName}" VerticalOptions="CenterAndExpand"/>
-                                <Label Grid.Column="1" Text="{Binding DiskTitle}" VerticalOptions="CenterAndExpand"/>
+                                <Label Grid.Column="0" Style="{DynamicResource ListItemTextStyle}" TextColor="Black" FontAttributes="Bold" Text="{Binding DiskName}" VerticalOptions="CenterAndExpand"/>
+                                <Label Grid.Column="1" Style="{DynamicResource ListItemTextStyle}" TextColor="Black" FontAttributes="Bold" Text="{Binding DiskTitle}" VerticalOptions="CenterAndExpand"/>
                             </Grid>
                         </ViewCell>
                     </DataTemplate>
@@ -46,14 +47,14 @@
                     <DataTemplate>
                         <ViewCell>
                             <StackLayout Padding="10,5,10,5" VerticalOptions="Center">
-                                <Label Text="{Binding ProgramTitle}" LineBreakMode="TailTruncation" Style="{DynamicResource ListItemTextStyle}" FontSize="Medium"/>
+                                <Label Text="{Binding ProgramTitle}" LineBreakMode="TailTruncation" TextColor="Black" Style="{DynamicResource ListItemTextStyle}" FontSize="Medium"/>
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
-                                    <Label Grid.Column="0" Text="{Binding Length, StringFormat=\{0:h\\:mm\\:ss\}}" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Small" LineBreakMode="NoWrap"/>
-                                    <Label Grid.Column="1" Text="{Binding ProgramGenre}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Small"/>
+                                    <Label Grid.Column="0" Text="{Binding Length, StringFormat=\{0:h\\:mm\\:ss\}}" TextColor="Black" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Small" LineBreakMode="NoWrap"/>
+                                    <Label Grid.Column="1" Text="{Binding ProgramGenre}" LineBreakMode="NoWrap" TextColor="Black" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Small"/>
                                 </Grid>
                             </StackLayout>
                         </ViewCell>
