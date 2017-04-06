@@ -37,7 +37,7 @@ Androidでapkファイルを開くには設定が必要です。
 ## Known Issues
 現在以下の問題が確認されています。
 * Android版:リモートファイルをコピー中でもおそらく終了できる。直す気はない。容量が小さいのでどうせすぐ終わります。
-* ~~Android版:終了時にエラーで落ちる。(Xamarin Formsのバグ[1](https://forums.xamarin.com/discussion/81793/back-button-from-causes-crash-on-android-when-page-is-masterdetail)[2](https://bugzilla.xamarin.com/show_bug.cgi?id=46494)。)そのうち治ると期待。~~最新ベータ版のXamarin Formsでは問題は発生しませんでした。
+* ~~Android版:終了時にエラーで落ちる。(Xamarin Formsのバグ[1](https://forums.xamarin.com/discussion/81793/back-button-from-causes-crash-on-android-when-page-is-masterdetail)[2](https://bugzilla.xamarin.com/show_bug.cgi?id=46494)。)そのうち治ると期待。~~　最新ベータ版のXamarin Formsでは問題は発生しませんでした。
 * iOS:動作は期待できるが試してはいない。アイコンや名前などの設定はしていない。
 * UWP版:ライブラリの関係上動作しません。
 * ~~Visual Studio:XAMLの補助が効きません。いくつかエラーが出ます。コンパイルは通ります。~~
@@ -46,6 +46,8 @@ Androidでapkファイルを開くには設定が必要です。
 * CSVの列名ではなく、順番固定で解釈しています。これはディスクタイトルを取得する設定にしたからです。
 
 現状で満足しているので、今後改良する気はあまりありません。時間をかけずに作ったので、適当な部分もあります。使っていて落ちたことはないのでかなり安定していると思いますが、csvファイルに問題があればうまく動作しないと思われますので、適宜ファイルの修正・再取得・再変換・Androidではデータの削除などを行ってください。
+
+ニーズは薄いと思っているのでFTP/SFTP/WebDav共有対応は考えてはいませんが、そのうち対応する可能性もあるかもしれません。あるいは誰かがやってください。
 
 ## Screenshot
 Android:
