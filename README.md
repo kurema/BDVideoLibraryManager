@@ -35,6 +35,19 @@ Androidでapkファイルを開くには設定が必要です。
 
 現状で満足しているので、今後改良する気はあまりありません。
 
+## Screenshot
+Android:
+![screenshot android 1](res/screenshot/01.png)
+![screenshot android 2](res/screenshot/02.png)
+![screenshot android 3](res/screenshot/03.png)
+![screenshot android 4](res/screenshot/04.png)
+![screenshot android 5](res/screenshot/05.png)
+![screenshot android 6](res/screenshot/06.png)
+Windows:
+![screenshot windows 1](res/screenshot/desktop01.png)
+![screenshot windows 2](res/screenshot/desktop02.png)
+
+
 ## Thanks
 以下の協力を以て本ツールは作られています。
 * BD-AVに含まれる情報の取得には Vesti La Giubba様の[bdavinfo](http://saysaysay.net/bdavtool/bdavinfo)を利用しています。
