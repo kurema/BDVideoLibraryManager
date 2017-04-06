@@ -25,15 +25,27 @@ Androidでapkファイルを開くには設定が必要です。
 4. PC上やAndroidから管理情報を見る(SMB経由。csvのまま)。
 5. 見たい映像が含まれるディスクを確認して、探して、見る。
 
+より詳細にWindows上での作業を説明します。
+1. Toolsをダウンロードして適当なフォルダに展開(releases→Tools.zip)。
+2. フォルダ内の"copy.bat"を編集。E:¥を実際のBDドライブのドライブレターに書き換える。
+3. ドライブにBDを一枚づつ挿入。その度にcopy.batを実行する(挿入から読み込みまで多少の時間を要します)。
+4. 全てのBDドライブを読み込んだらrpls2csv.batを実行する。
+5. できたcsvフォルダを適当な場所に移動して、共有フォルダやNASのCIFS/SMB機能でLan内に公開。
+6. csv/の上層フォルダにWindows版(releases→Windows_x64.zipを展開)を配置。これでWindowsで閲覧ができる。
+7. あればAndroid版をインストール。設定を選び、サーバー名・パス・ユーザー名・パスワードを設定。これでキャッシュされる。データ更新時には、一覧画面でプルダウンすれば再ダウンロード可能。
+
 ## Known Issues
 現在以下の問題が確認されています。
-* Android版:リモートファイルをコピー中でもおそらく終了できる。直す気はない。
-* Android版:終了時にエラーで落ちる。(Xamarin Formsのバグ[1](https://forums.xamarin.com/discussion/81793/back-button-from-causes-crash-on-android-when-page-is-masterdetail)[2](https://bugzilla.xamarin.com/show_bug.cgi?id=46494)。)そのうち治ると期待。
-* UWP版:文句を言われたので除外しましたが、おそらく動くと思います(nugetの再設定などは必要？)。
-* Visual Studio:XAMLの補助が効きません。いくつかエラーが出ます。コンパイルは通ります。
+* Android版:リモートファイルをコピー中でもおそらく終了できる。直す気はない。容量が小さいのでどうせすぐ終わります。
+* ~~Android版:終了時にエラーで落ちる。(Xamarin Formsのバグ[1](https://forums.xamarin.com/discussion/81793/back-button-from-causes-crash-on-android-when-page-is-masterdetail)[2](https://bugzilla.xamarin.com/show_bug.cgi?id=46494)。)そのうち治ると期待。~~最新ベータ版のXamarin Formsでは問題は発生しませんでした。
+* iOS:動作は期待できるが試してはいない。アイコンや名前などの設定はしていない。
+* UWP版:ライブラリの関係上動作しません。
+* ~~Visual Studio:XAMLの補助が効きません。いくつかエラーが出ます。コンパイルは通ります。~~
 * Visual Studio:Android版をコンパイル中にパス名が長すぎるてコンパイルできない事があります。素直にC直下あたりに移動しましょう。
+* ジャンルわけ機能とかはDIGAを前提にしている。一部適切に動作しない、常に無効値が表示されるなどの問題が予想されます。
+* CSVの列名ではなく、順番固定で解釈しています。これはディスクタイトルを取得する設定にしたからです。
 
-現状で満足しているので、今後改良する気はあまりありません。
+現状で満足しているので、今後改良する気はあまりありません。時間をかけずに作ったので、適当な部分もあります。使っていて落ちたことはないのでかなり安定していると思いますが、csvファイルに問題があればうまく動作しないと思われますので、適宜ファイルの修正・再取得・再変換・Androidではデータの削除などを行ってください。
 
 ## Screenshot
 Android:
