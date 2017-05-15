@@ -4,8 +4,8 @@
     "Microsoft.NETCore.Portable.Compatibility": "1.0.1",
     "NETStandard.Library": "1.6.1",
     "PCLStorage": "1.0.2",
-    "SharpCifs.Std": "0.1.6-beta1",
-    "Xamarin.Forms": "2.3.4.192-pre2"
+    "SharpCifs.Std": "0.2.0",
+    "Xamarin.Forms": "2.3.4.231"
   },
   "frameworks": {
     "netstandard1.4": {

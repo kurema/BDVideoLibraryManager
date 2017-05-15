@@ -74,7 +74,18 @@ namespace BDVideoLibraryManagerXF.Views
 
         private void Search_Toggle(object sender, EventArgs e)
         {
-            SearchBar.IsVisible = !SearchBar.IsVisible;
+            if (!String.IsNullOrEmpty(SearchBar.Text))
+            {
+                ViewModel.SearchCommand.Execute(null);
+            }
+            else
+            {
+                SearchBar.IsVisible = !SearchBar.IsVisible;
+                if (SearchBar.IsVisible)
+                {
+                    SearchBar.Focus();
+                }
+            }
         }
 
         private void Clear_Option(object sender, EventArgs e)
@@ -88,8 +99,6 @@ namespace BDVideoLibraryManagerXF.Views
             if (!(args.SelectedItem is VideoLibraryManagerCommon.Library.VideoBD))
                 return;
             var item = args.SelectedItem as VideoLibraryManagerCommon.Library.VideoBD;
-            if (item == null)
-                return;
 
             int maxVideoCount = 50;
 
@@ -123,6 +132,11 @@ namespace BDVideoLibraryManagerXF.Views
 
             // Manually deselect item
             LibraryListView.SelectedItem = null;
+        }
+
+        private void SearchBar_OnUnfocused(object sender, FocusEventArgs e)
+        {
+            ViewModel.SearchCommand.Execute(null);
         }
     }
 }

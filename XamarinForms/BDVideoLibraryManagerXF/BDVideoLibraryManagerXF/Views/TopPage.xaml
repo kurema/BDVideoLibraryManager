@@ -7,10 +7,6 @@
         <pages:MasterPage x:Name="MasterSide"/>
     </MasterDetailPage.Master>
     <MasterDetailPage.Detail>
-        <NavigationPage x:Name="Navigation">
-            <x:Arguments>
-                <pages:LibraryPage/>
-            </x:Arguments>
-        </NavigationPage>
+        <NavigationPage x:Name="Navigation" />
     </MasterDetailPage.Detail>
 </MasterDetailPage>

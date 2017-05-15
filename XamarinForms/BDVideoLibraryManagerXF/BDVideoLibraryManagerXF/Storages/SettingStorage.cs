@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.String;
 
 namespace BDVideoLibraryManagerXF.Storages
 {
     public static class SettingStorage
     {
+        public static bool IsSet => !IsNullOrEmpty(SMBServerName);
+
         public static string SMBPassword
         {
             get

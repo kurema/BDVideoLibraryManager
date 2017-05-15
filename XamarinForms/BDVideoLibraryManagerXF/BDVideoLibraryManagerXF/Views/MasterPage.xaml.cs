@@ -35,6 +35,10 @@ namespace BDVideoLibraryManagerXF.Views
                     new MasterMenuItem{TargetType=typeof(Views.GenresPage),Title="分類"},
                     new MasterMenuItem{Title="今日のおまかせ",Action=(t)=>{
                         var lib= Storages.LibraryStorage.Library;
+
+                        if (lib?.Contents == null || lib.Contents.Length == 0)
+                            return;
+
                         var pl=new VideoLibraryManagerCommon.Library.DiskVideoPairList();
                         foreach(var disk in lib.Contents)
                         {
@@ -48,9 +52,19 @@ namespace BDVideoLibraryManagerXF.Views
 
                         var page = (Page)Activator.CreateInstance(typeof(Views.VideoDetailPage),todaysprog);
                         page.Title = "今日のおまかせ";
-                        t.Detail = new NavigationPage(page);
+                        if (t.Detail is NavigationPage)
+                        {
+                            (t.Detail as NavigationPage).PushAsync(page);
+                        }
+                        else
+                        {
+                            t.Detail = new NavigationPage(page);
+                        }
                     } },
-                    new MasterMenuItem { TargetType=typeof(Views.SettingPage), Title = "設定" },
+                    new MasterMenuItem {  Title = "設定",Action= (t) =>
+                    {
+                        t.Detail=new SettingPage();
+                    } },
                     new MasterMenuItem{TargetType=typeof(Views.LicensePage),Title="ライセンス"}
                 });
             }

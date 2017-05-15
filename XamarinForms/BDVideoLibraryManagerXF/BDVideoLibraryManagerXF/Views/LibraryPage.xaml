@@ -18,6 +18,7 @@
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <StackLayout>
+            <SearchBar x:Name="SearchBar" Text="{Binding SearchWord}"  IsVisible="false" SearchCommand="{Binding SearchCommand}" Unfocused="SearchBar_OnUnfocused"/>
             <StackLayout Orientation="Horizontal" IsVisible="{Binding SearchGenre, Converter={StaticResource IsNotNullOrEmptyValueConverter}}">
                 <Button Text="解除" Clicked="Clear_Option" />
                 <Label Text="{Binding SearchGenre, StringFormat='ジャンル: {0}'}"  VerticalTextAlignment="Center" />
@@ -26,13 +27,13 @@
                 <Button Text="解除" Clicked="Clear_Option" />
                 <Label Text="{Binding TargetDisc.DiskName, StringFormat='ディスク: {0}'}"  VerticalTextAlignment="Center" />
             </StackLayout>
-            <SearchBar x:Name="SearchBar" Text="{Binding SearchWord}"  IsVisible="false" SearchCommand="{Binding SearchCommand}"/>
             <ListView x:Name="LibraryListView"  VerticalOptions="FillAndExpand" IsPullToRefreshEnabled="true" ItemsSource="{Binding Library.Contents}" IsGroupingEnabled="True" GroupDisplayBinding="{Binding}"
-                  Refreshing="ListView_Refreshing" ItemSelected="OnItemSelected" IsRefreshing="{Binding IsBusy, Mode=OneWay}">
+                  Refreshing="ListView_Refreshing" ItemSelected="OnItemSelected" IsRefreshing="{Binding IsBusy, Mode=OneWay}"
+                  HasUnevenRows="True">
                 <ListView.GroupHeaderTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <Grid Padding="15,0,15,0">
+                            <Grid Padding="15,10">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="*"/>
