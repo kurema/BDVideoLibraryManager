@@ -256,3 +256,6 @@ paket-files/
 
 # APK
 *.apk
+
+# AutoCad backup
+res/model/*.bak
