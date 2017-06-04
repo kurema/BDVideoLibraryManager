@@ -24,6 +24,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0">
+            <Button Width="50" Content="取り込み" Click="ButtonBase_OnClick"/>
             <Button Width="50" Content="全表示" Click="Button_Click_2"/>
             <ComboBox Name="ComboBoxSearchType" SelectedIndex="0" ItemsSource="{Binding Source={StaticResource SearchTypeEnumKey}}" 
             SelectedItem="{x:Static local:SearchType.全て}" >

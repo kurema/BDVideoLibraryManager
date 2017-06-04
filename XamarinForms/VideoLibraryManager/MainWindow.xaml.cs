@@ -28,7 +28,18 @@ namespace VideoLibraryManager
         {
             InitializeComponent();
 
+            Init();
+        }
+
+        public void Init()
+        {
             var d = new Queue<DiskBD>();
+
+            if (!System.IO.Directory.Exists(@".\csv"))
+            {
+                System.IO.Directory.CreateDirectory(@".\csv");
+            }
+
             foreach (var f in System.IO.Directory.GetFiles(@".\csv"))
             {
                 if (System.IO.Path.GetExtension(f) == ".csv")
@@ -176,6 +187,13 @@ namespace VideoLibraryManager
                     break;
             }
             if (result != null) data.SetContents(result);
+        }
+
+        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        {
+            var win=new LoadDiskWindow();
+            win.ParentMainWindow = this;
+            win.Show();
         }
     }
 
