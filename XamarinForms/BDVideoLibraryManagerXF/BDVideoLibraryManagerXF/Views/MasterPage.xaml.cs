@@ -31,9 +31,9 @@ namespace BDVideoLibraryManagerXF.Views
             {
                 MenuItems = new ObservableCollection<MasterMenuItem>(new[]
                 {
-                    new MasterMenuItem { TargetType=typeof(Views.LibraryPage), Title = "一覧" },
-                    new MasterMenuItem{TargetType=typeof(Views.GenresPage),Title="分類"},
-                    new MasterMenuItem{Title="今日のおまかせ",Action=(t)=>{
+                    new MasterMenuItem { TargetType=typeof(Views.LibraryPage), Title = "一覧",Description="録画番組一覧" },
+                    new MasterMenuItem{TargetType=typeof(Views.GenresPage),Title="分類",Description="ジャンル検索"},
+                    new MasterMenuItem{Title="今日のおまかせ",Description="ランダムで番組選択",Action=(t)=>{
                         var lib= Storages.LibraryStorage.Library;
 
                         if (lib?.Contents == null || lib.Contents.Length == 0)
@@ -61,11 +61,11 @@ namespace BDVideoLibraryManagerXF.Views
                             t.Detail = new NavigationPage(page);
                         }
                     } },
-                    new MasterMenuItem {  Title = "設定",Action= (t) =>
+                    new MasterMenuItem {  Title = "設定",Description="サーバー設定",Action= (t) =>
                     {
                         t.Detail=new SettingPage();
                     } },
-                    new MasterMenuItem{TargetType=typeof(Views.LicensePage),Title="ライセンス"}
+                    new MasterMenuItem{TargetType=typeof(Views.LicensePage),Title="ライセンス",Description="オープンソースライセンス"}
                 });
             }
             public event PropertyChangedEventHandler PropertyChanged;
@@ -77,6 +77,7 @@ namespace BDVideoLibraryManagerXF.Views
             public Action<Xamarin.Forms.MasterDetailPage> Action;
 
             public string Title { get; set; }
+            public string Description { get; set; }
 
             public Type TargetType { get; set; }
         }

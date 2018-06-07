@@ -24,6 +24,9 @@
     <JavaOptions />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <AndroidKeyStore>false</AndroidKeyStore>
+    <AndroidSigningKeyStore>D:\Users\kurema\AppData\Local\Xamarin\Mono for Android\Keystore\KEY8192\KEY8192.keystore</AndroidSigningKeyStore>
+    <AndroidSigningStorePass />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -47,11 +50,11 @@
     <AndroidUseSharedRuntime>False</AndroidUseSharedRuntime>
     <AndroidLinkMode>SdkOnly</AndroidLinkMode>
     <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
-    <BundleAssemblies>False</BundleAssemblies>
+    <BundleAssemblies>false</BundleAssemblies>
     <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
     <Debugger>.Net (Xamarin)</Debugger>
-    <AotAssemblies>False</AotAssemblies>
-    <EnableLLVM>False</EnableLLVM>
+    <AotAssemblies>false</AotAssemblies>
+    <EnableLLVM>false</EnableLLVM>
     <AndroidEnableMultiDex>False</AndroidEnableMultiDex>
     <EnableProguard>False</EnableProguard>
     <DebugSymbols>False</DebugSymbols>

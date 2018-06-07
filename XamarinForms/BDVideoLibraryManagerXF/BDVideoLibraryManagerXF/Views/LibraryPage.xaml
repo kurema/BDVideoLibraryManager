@@ -14,11 +14,11 @@
         <vm:LibraryViewModel/>
     </ContentPage.BindingContext>
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="🔍" Clicked="Search_Toggle" />
+        <ToolbarItem Text="検索" Clicked="Search_Toggle" />
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <StackLayout>
-            <SearchBar x:Name="SearchBar" Text="{Binding SearchWord}"  IsVisible="false" SearchCommand="{Binding SearchCommand}" Unfocused="SearchBar_OnUnfocused"/>
+            <SearchBar x:Name="SearchBar" Text="{Binding SearchWord}"  IsVisible="False" SearchCommand="{Binding SearchCommand}" Unfocused="SearchBar_OnUnfocused"  HeightRequest="40" />
             <StackLayout Orientation="Horizontal" IsVisible="{Binding SearchGenre, Converter={StaticResource IsNotNullOrEmptyValueConverter}}">
                 <Button Text="解除" Clicked="Clear_Option" />
                 <Label Text="{Binding SearchGenre, StringFormat='ジャンル: {0}'}"  VerticalTextAlignment="Center" />

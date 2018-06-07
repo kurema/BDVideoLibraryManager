@@ -5,7 +5,7 @@
              x:Class="BDVideoLibraryManagerXF.Views.MasterPage">
     <StackLayout>
         <ListView x:Name="ListViewMenuItems"
-              SeparatorVisibility="None"
+              SeparatorVisibility="Default"
               HasUnevenRows="true"
               ItemsSource="{Binding MenuItems}">
             <ListView.Header>
@@ -15,10 +15,16 @@
                 <DataTemplate>
                     <ViewCell>
                         <StackLayout Padding="15,10" HorizontalOptions="FillAndExpand">
-                            <Label VerticalOptions="FillAndExpand" 
+                            <StackLayout HorizontalOptions="FillAndExpand">
+                                <Label VerticalOptions="FillAndExpand" 
                     VerticalTextAlignment="Center" 
                     Text="{Binding Title}" TextColor="Black"
-                    FontSize="24"/>
+                    FontSize="Medium"/>
+                                <Label VerticalOptions="FillAndExpand" 
+                    VerticalTextAlignment="Center" 
+                    Text="{Binding Description}" TextColor="Gray"
+                    FontSize="Small"/>
+                            </StackLayout>
                         </StackLayout>
                     </ViewCell>
                 </DataTemplate>
