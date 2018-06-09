@@ -74,14 +74,16 @@ namespace BDVideoLibraryManagerXF.Views
 
         private void Search_Toggle(object sender, EventArgs e)
         {
+            var ts = (DateTime.Now - SearchBarLastClosedTime);
             if (!String.IsNullOrEmpty(SearchBar.Text))
             {
                 ViewModel.SearchCommand.Execute(null);
             }
-            else
+            else if(ts.TotalMilliseconds>100 || ts.TotalMilliseconds < 0)
             {
-                SearchBar.IsVisible = !SearchBar.IsVisible;
-                if (SearchBar.IsVisible)
+                var b = !SearchBar.IsVisible;
+                SearchBar.IsVisible = b;
+                if (b)
                 {
                     SearchBar.Focus();
                 }
@@ -99,6 +101,9 @@ namespace BDVideoLibraryManagerXF.Views
             if (!(args.SelectedItem is VideoLibraryManagerCommon.Library.VideoBD))
                 return;
             var item = args.SelectedItem as VideoLibraryManagerCommon.Library.VideoBD;
+
+            // Manually deselect item
+            LibraryListView.SelectedItem = null;
 
             int maxVideoCount = 50;
 
@@ -130,13 +135,26 @@ namespace BDVideoLibraryManagerXF.Views
                 await Navigation.PushAsync(new VideosDetailPage(list, result));
             }
 
-            // Manually deselect item
-            LibraryListView.SelectedItem = null;
+
         }
+
+        //検索ボタンクリック時にSearchBarのフォーカスも外れるので強引に時間差で対応。
+        public DateTime SearchBarLastClosedTime = new DateTime();
 
         private void SearchBar_OnUnfocused(object sender, FocusEventArgs e)
         {
-            ViewModel.SearchCommand.Execute(null);
+            if (String.IsNullOrEmpty(SearchBar.Text))
+            {
+                if (SearchBar.IsVisible)
+                {
+                    SearchBarLastClosedTime = DateTime.Now;
+                    SearchBar.IsVisible = false;
+                }
+            }
+            else
+            {
+                ViewModel.SearchCommand.Execute(null);
+            }
         }
     }
 }

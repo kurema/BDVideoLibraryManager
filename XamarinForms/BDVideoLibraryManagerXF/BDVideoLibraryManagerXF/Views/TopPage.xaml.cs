@@ -17,9 +17,11 @@ namespace BDVideoLibraryManagerXF.Views
             InitializeComponent();
 
             if (SettingStorage.IsSet)
-                Navigation.PushAsync(new LibraryPage(){Title = "一覧"});
+                //Navigation.PushAsync(new TutorialPage() { Title = "チュートリアル" });
+                Navigation.PushAsync(new LibraryPage() { Title = "一覧" });
             else
-                Navigation.PushAsync(new SettingPage() { Title = "設定" });
+                //Navigation.PushAsync(new SettingPage() { Title = "設定" });
+                Navigation.PushAsync(new TutorialPage() { Title = "チュートリアル" });
 
             MasterSide.ListView.ItemSelected += ListView_ItemSelected;
         }

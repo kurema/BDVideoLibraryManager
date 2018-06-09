@@ -14,7 +14,7 @@
         <vm:LibraryViewModel/>
     </ContentPage.BindingContext>
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="検索" Clicked="Search_Toggle" />
+        <ToolbarItem x:Name="Search_button" Text="検索" Clicked="Search_Toggle" />
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <StackLayout>

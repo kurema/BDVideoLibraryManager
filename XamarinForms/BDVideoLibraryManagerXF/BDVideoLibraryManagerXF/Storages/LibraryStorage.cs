@@ -40,14 +40,58 @@ namespace BDVideoLibraryManagerXF.Storages
             return Library = new Library(d.ToArray());
         }
 
-        public static bool TestAccess(string serverName, string remotePath, string UserName, string Password)
+
+        public static bool TestAccess(string serverName, string remotePath, string UserName, string Password, out SharpCifs.Smb.SmbFile smbFolder)
+        {
+            if (!remotePath.EndsWith("/")) { remotePath += "/"; }
+            if (! TestAccessSingle(serverName,remotePath,UserName,Password,out smbFolder))
+            {
+                remotePath += "csv/";
+                if (!TestAccessSingle(serverName, remotePath, UserName, Password, out smbFolder))
+                {
+                    smbFolder = null;
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            return true;
+        }
+
+        public static bool TestAccessSingle(string serverName, string remotePath, string UserName, string Password, out SharpCifs.Smb.SmbFile smbFolder)
         {
             try
             {
                 var folder = new SharpCifs.Smb.SmbFile("smb://" + UserName + ":" + Password + "@" + serverName + "/" + remotePath);
-                if (!folder.Exists() || !folder.IsDirectory()) { return false; }
+                if (!folder.Exists() || !folder.IsDirectory())
+                {
+                    smbFolder = null;
+                    return false;
+                }
+
+                    bool Sucess = false;
+                    foreach (var item in folder.ListFiles())
+                    {
+                        if (item.IsFile() && System.IO.Path.GetExtension(item.GetName()) == ".csv")
+                        {
+                            Sucess = true;
+                            break;
+                        }
+                    }
+                if (!Sucess)
+                {
+                    smbFolder = null;
+                    return false;
+                }
+                smbFolder = folder;
             }
-            catch { return false; }
+            catch
+            {
+                smbFolder = null;
+                return false;
+            }
             return true;
         }
 
@@ -56,17 +100,13 @@ namespace BDVideoLibraryManagerXF.Storages
             return await CopyToLocal(SettingStorage.SMBServerName, SettingStorage.SMBPath, SettingStorage.SMBID, SettingStorage.SMBPassword);
         }
 
-
         public static async Task<bool> CopyToLocal(string serverName, string remotePath,string UserName,string Password)
         {
             SharpCifs.Smb.SmbFile folder;
             if (!remotePath.EndsWith("/")) { remotePath += "/"; }
-            try
-            {
-                folder = new SharpCifs.Smb.SmbFile("smb://" + UserName + ":" + Password + "@" + serverName + "/" + remotePath);
-                if (!folder.Exists() || !folder.IsDirectory()) { return false; }
+            if (! TestAccess(serverName, remotePath, UserName, Password, out folder)){
+                return false;
             }
-            catch { return false; }
             if (Copying) { return false; }
             Copying = true;
 
