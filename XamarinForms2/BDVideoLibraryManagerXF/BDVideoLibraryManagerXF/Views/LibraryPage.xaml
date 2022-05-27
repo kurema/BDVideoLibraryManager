@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BDVideoLibraryManagerXF.Views.LibraryPage"
+             xmlns:vm="clr-namespace:BDVideoLibraryManagerXF.ViewModels"
+             xmlns:vc="clr-namespace:BDVideoLibraryManagerXF.ValueConverters"
+             >
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <vc:IsNotNullOrEmptyValueConverter x:Key="IsNotNullOrEmptyValueConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.BindingContext>
+        <vm:LibraryViewModel/>
+    </ContentPage.BindingContext>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem x:Name="Search_button" Clicked="Search_Toggle">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource FontFamily="MaterialSearch" Glyph="&#xe8b6;"/>
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+        <!-- &#xFE0E;は絵文字バリエーション・シーケンス。Unicode 6.1以降。Androidでは機能しない。残念。 -->
+    </ContentPage.ToolbarItems>
+    <ContentPage.Content>
+        <StackLayout>
+            <SearchBar x:Name="SearchBar" Placeholder="キーワード" BackgroundColor="White"
+                       Text="{Binding SearchWord}"
+                       IsVisible="False" SearchCommand="{Binding SearchCommand}" Unfocused="SearchBar_OnUnfocused"  HeightRequest="40" />
+            <StackLayout Orientation="Horizontal" IsVisible="{Binding SearchGenre, Converter={StaticResource IsNotNullOrEmptyValueConverter}}">
+                <Button Text="解除" Clicked="Clear_Option" />
+                <Label Text="{Binding SearchGenre, StringFormat='ジャンル: {0}'}"  VerticalTextAlignment="Center" />
+            </StackLayout>
+            <StackLayout Orientation="Horizontal" IsVisible="{Binding TargetDisc, Converter={StaticResource IsNotNullOrEmptyValueConverter}}">
+                <Button Text="解除" Clicked="Clear_Option" />
+                <Label Text="{Binding TargetDisc.DiskName, StringFormat='ディスク: {0}'}"  VerticalTextAlignment="Center" />
+            </StackLayout>
+            <ListView x:Name="LibraryListView"  VerticalOptions="FillAndExpand" IsPullToRefreshEnabled="true" ItemsSource="{Binding Library.Contents}" IsGroupingEnabled="True" GroupDisplayBinding="{Binding}"
+                  Refreshing="ListView_Refreshing" ItemSelected="OnItemSelected" IsRefreshing="{Binding IsBusy, Mode=OneWay}"
+                  HasUnevenRows="True">
+                <ListView.GroupHeaderTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid Padding="15,10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Column="0" Style="{DynamicResource ListItemTextStyle}" TextColor="{AppThemeBinding Light=Black,Dark=White,Default=Black}" FontAttributes="Bold" Text="{Binding DiskName}" VerticalOptions="CenterAndExpand"/>
+                                <Label Grid.Column="1" Style="{DynamicResource ListItemTextStyle}" TextColor="{AppThemeBinding Light=Black,Dark=White,Default=Black}" FontAttributes="Bold" Text="{Binding DiskTitle}" VerticalOptions="CenterAndExpand"/>
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.GroupHeaderTemplate>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout Padding="10,5,10,5" VerticalOptions="Center">
+                                <Label Text="{Binding ProgramTitle}" LineBreakMode="TailTruncation" TextColor="{AppThemeBinding Light=Black,Dark=White,Default=Black}" Style="{DynamicResource ListItemTextStyle}" FontSize="Medium"/>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Label Grid.Column="0" Text="{Binding Length, StringFormat=\{0:h\\:mm\\:ss\}}" TextColor="{AppThemeBinding Light=Black,Dark=White,Default=Black}" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Small" LineBreakMode="NoWrap"/>
+                                    <Label Grid.Column="1" Text="{Binding ProgramGenre}" LineBreakMode="NoWrap" TextColor="{AppThemeBinding Light=Black,Dark=White,Default=Black}" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Small"/>
+                                </Grid>
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
