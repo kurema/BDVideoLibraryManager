@@ -45,8 +45,8 @@ namespace BDVideoLibraryManagerXF.Views
 
         public async void LoadLocal()
         {
-            if(ViewModel!=null) ViewModel.IsBusy = true;
-            var lib= await Storages.LibraryStorage.GetLocalData();
+            if (ViewModel != null) ViewModel.IsBusy = true;
+            var lib = await Storages.LibraryStorage.GetLocalData();
             if (lib != null)
                 BindingContext = new ViewModels.LibraryViewModel() { FullLibrary = lib };
             if (ViewModel != null) ViewModel.IsBusy = false;
@@ -54,7 +54,7 @@ namespace BDVideoLibraryManagerXF.Views
 
         public async void TryLoadLocal()
         {
-            if(ViewModel!=null) ViewModel.IsBusy = true;
+            if (ViewModel != null) ViewModel.IsBusy = true;
             try
             {
                 var lib = await Storages.LibraryStorage.GetLocalData();
@@ -62,18 +62,38 @@ namespace BDVideoLibraryManagerXF.Views
                     BindingContext = new ViewModels.LibraryViewModel() { FullLibrary = lib };
             }
             catch { }
-            if(ViewModel!=null) ViewModel.IsBusy = false;
+            finally { if (ViewModel != null) ViewModel.IsBusy = false; }
         }
 
         public async void LoadRemote()
         {
-            if (ViewModel != null) ViewModel.IsBusy = true;
-            if(! await Storages.LibraryStorage.CopyToLocal())
+            await LoadRemote(async (a, b, c) => await DisplayAlert(a, b, c), ViewModel, () => TryLoadLocal());
+        }
+
+        public async static Task LoadRemote(Func<string, string, string, Task> alert, ViewModels.LibraryViewModel viewModel, Action loadLocal)
+        {
+            if (Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None
+                || (!Xamarin.Essentials.Connectivity.ConnectionProfiles.Any(a => a is Xamarin.Essentials.ConnectionProfile.WiFi or Xamarin.Essentials.ConnectionProfile.Ethernet)))
             {
-                await DisplayAlert("情報取得", "最新情報の取得に失敗しました。", "OK");
+                //SMBはチャレンジ/レスポンス方式なので、信頼できないWi-Fiに繋いでもパスワードが漏れることはない。
+                //とはいえ、Wi-Fiアクセスポイント名(MACアドレス)と紐付けた方が良い気がする。同一名のサーバーがあるかも知れないし。
+                await alert?.Invoke("情報取得", "ネットワークに接続されていません。", "OK");
+                return;
             }
-            TryLoadLocal();
-            if (ViewModel != null) ViewModel.IsBusy = false;
+
+            if (viewModel != null) viewModel.IsBusy = true;
+            try
+            {
+                if (!await Storages.LibraryStorage.CopyToLocal())
+                {
+                    await alert?.Invoke("情報取得", "最新情報の取得に失敗しました。", "OK");
+                }
+                loadLocal?.Invoke();
+            }
+            finally
+            {
+                if (viewModel != null) viewModel.IsBusy = false;
+            }
         }
 
         private void ListView_Refreshing(object sender, EventArgs e)
@@ -90,7 +110,7 @@ namespace BDVideoLibraryManagerXF.Views
             {
                 ViewModel.SearchCommand.Execute(null);
             }
-            else if(ts.TotalMilliseconds>500 || ts.TotalMilliseconds < 0)
+            else if (ts.TotalMilliseconds > 500 || ts.TotalMilliseconds < 0)
             {
                 var b = !SearchBar.IsVisible;
                 SearchBar.IsVisible = b;
@@ -104,7 +124,18 @@ namespace BDVideoLibraryManagerXF.Views
         private void Clear_Option(object sender, EventArgs e)
         {
             ViewModel.SearchGenre = null;
+            var originalDisc = ViewModel.TargetDisc;
             ViewModel.TargetDisc = null;
+
+            async void scroll(VideoLibraryManagerCommon.Library.DiskBD target)
+            {
+                await Task.Delay(100);
+                if (target is not null && target.FirstOrDefault() is not null)
+                {
+                    LibraryListView.ScrollTo(null, target, ScrollToPosition.Center, false);
+                }
+            }
+            scroll(originalDisc);
         }
 
         async void OnItemSelected(object sender, SelectedItemChangedEventArgs args)
@@ -120,10 +151,10 @@ namespace BDVideoLibraryManagerXF.Views
 
             VideoLibraryManagerCommon.Library.DiskVideoPair result = null;
             var list = new VideoLibraryManagerCommon.Library.DiskVideoPairList();
-            if(this.BindingContext is ViewModels.LibraryViewModel)
+            if (this.BindingContext is ViewModels.LibraryViewModel)
             {
                 var bd = this.BindingContext as ViewModels.LibraryViewModel;
-                foreach(var disk in bd.Library.Contents)
+                foreach (var disk in bd.Library.Contents)
                 {
                     foreach (var video in disk.Contents)
                     {

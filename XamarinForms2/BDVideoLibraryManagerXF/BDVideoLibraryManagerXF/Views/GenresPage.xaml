@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="BDVideoLibraryManagerXF.Views.GenresPage">
+             x:Class="BDVideoLibraryManagerXF.Views.GenresPage"
+             Title="ジャンル一覧">
     <ListView HasUnevenRows="True" x:Name="listViewGenre"  VerticalOptions="FillAndExpand" ItemSelected="OnItemSelected">
         <ListView.ItemTemplate>
             <DataTemplate>

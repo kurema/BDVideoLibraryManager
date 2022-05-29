@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BDVideoLibraryManagerXF.Views.LibraryDiscPage"
+             xmlns:vm="clr-namespace:BDVideoLibraryManagerXF.ViewModels"
+             Title="ディスク一覧"
+             >
+    <ContentPage.BindingContext>
+        <vm:LibraryViewModel/>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <ListView VerticalOptions="FillAndExpand" ItemsSource="{Binding Library.Contents}" ItemSelected="OnItemSelected" HasUnevenRows="True"
+                  IsPullToRefreshEnabled="true" IsRefreshing="{Binding IsBusy, Mode=OneWay}" Refreshing="ListView_Refreshing"
+                  >
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <Grid Padding="15,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0" Style="{DynamicResource ListItemTextStyle}" TextColor="{AppThemeBinding Light=Black,Dark=White,Default=Black}" Text="{Binding DiskName}" VerticalOptions="CenterAndExpand"/>
+                            <Label Grid.Column="1" Style="{DynamicResource ListItemTextStyle}" TextColor="{AppThemeBinding Light=Black,Dark=White,Default=Black}" Text="{Binding DiskTitle}" VerticalOptions="CenterAndExpand"/>
+                            <Label Grid.Column="2" Style="{DynamicResource ListItemTextStyle}" TextColor="{AppThemeBinding Light=Black,Dark=White,Default=Black}" VerticalOptions="Center" HorizontalOptions="End">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="{Binding Contents.Length}"/>
+                                        <Span Text="動画"/>
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                        </Grid>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </ContentPage.Content>
+</ContentPage>

@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="BDVideoLibraryManagerXF.Views.VideoDetailPage"
+             Title="詳細"
              >
     <ScrollView>
         <StackLayout Spacing="20" Padding="15">
@@ -17,7 +18,11 @@
                 <Button Text="選択" Clicked="Select_Disc" />
                 <Label Text="{Binding Disk.DiskName, StringFormat='ディスク番号:{0}'}" Style="{DynamicResource ListItemDetailTextStyle}" TextColor="{AppThemeBinding Light=Black,Dark=White,Default=Black}" FontSize="Medium" VerticalTextAlignment="Center"/>
             </StackLayout>
-            <Label Text="{Binding Video.ProgramDetail}" Style="{DynamicResource ListItemDetailTextStyle}" TextColor="{AppThemeBinding Light=Black,Dark=White,Default=Black}" FontSize="Small"/>
+            <Label Text="{Binding Video.ProgramDetail}" Style="{DynamicResource ListItemDetailTextStyle}" TextColor="{AppThemeBinding Light=Black,Dark=White,Default=Black}" FontSize="Small"                   >
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
+                </Label.GestureRecognizers>
+            </Label>
         </StackLayout>
     </ScrollView>
 </ContentPage>

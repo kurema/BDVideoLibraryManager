@@ -21,10 +21,7 @@ namespace BDVideoLibraryManagerXF.Views
 
         private async void Select_Disc(object sender, EventArgs e)
         {
-            if (!(this.BindingContext is VideoLibraryManagerCommon.Library.DiskVideoPair))
-                return;
-            var bind = (this.BindingContext as VideoLibraryManagerCommon.Library.DiskVideoPair);
-
+            if (this.BindingContext is not VideoLibraryManagerCommon.Library.DiskVideoPair bind) return;
             var lp = new LibraryPage();
             lp.TargetDisc = Storages.LibraryStorage.Library.Contents.Where((d) => d.DiskName == bind.Disk.DiskName).First();
             await Navigation.PushAsync(lp);
@@ -33,6 +30,15 @@ namespace BDVideoLibraryManagerXF.Views
         public VideoDetailPage()
         {
             InitializeComponent();
+        }
+
+        private void TapGestureRecognizer_Tapped(object sender, EventArgs e)
+        {
+            if (sender is not Label label) return;
+            double sizeSmall = Device.GetNamedSize(NamedSize.Small, typeof(Label));
+            double sizeBody = Device.GetNamedSize(NamedSize.Body, typeof(Label));
+            if (label.FontSize == sizeSmall) label.FontSize = sizeBody;
+            else if (label.FontSize == sizeBody) label.FontSize = sizeSmall;
         }
     }
 }

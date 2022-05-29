@@ -32,6 +32,7 @@ namespace BDVideoLibraryManagerXF.Views
                 MenuItems = new ObservableCollection<MasterMenuItem>(new[]
                 {
                     new MasterMenuItem { TargetType=typeof(Views.LibraryPage), Title = "一覧",Description="録画番組一覧" },
+                    new MasterMenuItem { TargetType=typeof(Views.LibraryDiscPage), Title = "ディスク一覧",Description="ディスク一覧" },
                     new MasterMenuItem{TargetType=typeof(Views.GenresPage),Title="分類",Description="ジャンル検索"},
                     new MasterMenuItem{Title="今日のおまかせ",Description="ランダムで番組選択",Action=(t)=>{
                         var lib= Storages.LibraryStorage.Library;
@@ -48,7 +49,7 @@ namespace BDVideoLibraryManagerXF.Views
                             }
                         }
                         Random rd=new Random((int)(DateTime.Now.Date.Ticks/TimeSpan.FromDays(1).Ticks));
-                        var todaysprog= pl[ rd.Next(pl.Count)];
+                        var todaysprog= pl.OrderBy(a=>a.Video.Length.TotalMilliseconds).ToArray()[ rd.Next(pl.Count)];
 
                         var page = (Page)Activator.CreateInstance(typeof(Views.VideoDetailPage),todaysprog);
                         page.Title = "今日のおまかせ";
@@ -61,10 +62,13 @@ namespace BDVideoLibraryManagerXF.Views
                             t.Detail = new NavigationPage(page);
                         }
                     } },
-                    new MasterMenuItem {  Title = "設定",Description="サーバー設定",Action= (t) =>
+                    new MasterMenuItem {  Title = "設定",Description="サーバー設定"
+                    ,Action= (t) =>
                     {
-                        t.Detail=new SettingPage();
-                    } },
+                        t.Detail=new NavigationPage( new SettingPage());
+                    } 
+                    //,TargetType=typeof(Views.SettingPage)
+                    },
                     new MasterMenuItem{TargetType=typeof(Views.LicensePage),Title="ライセンス",Description="オープンソースライセンス"}
                 });
             }

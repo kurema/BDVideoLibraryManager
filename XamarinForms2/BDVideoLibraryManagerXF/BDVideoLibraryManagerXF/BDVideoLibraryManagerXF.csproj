@@ -20,7 +20,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="PCLStorage" Version="1.0.2" />
 		<PackageReference Include="SMBLibrary" Version="1.4.8" />
 		<PackageReference Include="Xamarin.Forms" Version="5.0.0.2401" />
 		<PackageReference Include="Xamarin.Essentials" Version="1.7.3" />
@@ -28,5 +27,11 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\VideoLibraryManagerCommon\VideoLibraryManagerCommon.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Update="Views\LibraryDiscPage.xaml">
+	    <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+	  </EmbeddedResource>
 	</ItemGroup>
 </Project>

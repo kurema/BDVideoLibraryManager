@@ -1,18 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             Title="Setting "
+             Title="設定"
              x:Class="BDVideoLibraryManagerXF.Views.SettingPage">
-    <StackLayout Padding="10">
-        <Label Text="サーバー名" TextColor="{AppThemeBinding Light=Black,Dark=White,Default=Black}"/>
-        <Entry x:Name="Label_Smb_Name" />
-        <Label Text="ユーザー名" TextColor="{AppThemeBinding Light=Black,Dark=White,Default=Black}"/>
-        <Entry x:Name="Label_Smb_User" />
-        <Label Text="パスワード" TextColor="{AppThemeBinding Light=Black,Dark=White,Default=Black}"/>
-        <Entry x:Name="Label_Smb_Password" IsPassword="True" />
-        <Label Text="パス" TextColor="{AppThemeBinding Light=Black,Dark=White,Default=Black}"/>
-        <Entry x:Name="Label_Smb_Path" />
-        <Button Text="保存" Clicked="Button_Clicked"/>
-        <Button Text="チュートリアル" Clicked="Button_Clicked_Tutorial" Margin="0,10,0,0"/>
-    </StackLayout>
+    <ScrollView>
+        <StackLayout Padding="10">
+            <Label Text="サーバー名" TextColor="{AppThemeBinding Light=Black,Dark=White,Default=Black}"/>
+            <Entry x:Name="Label_Smb_Name" />
+            <Label Text="ユーザー名" TextColor="{AppThemeBinding Light=Black,Dark=White,Default=Black}"/>
+            <Entry x:Name="Label_Smb_User" />
+            <Label Text="パスワード" TextColor="{AppThemeBinding Light=Black,Dark=White,Default=Black}"/>
+            <Entry x:Name="Label_Smb_Password" IsPassword="True" />
+            <Label Text="パス" TextColor="{AppThemeBinding Light=Black,Dark=White,Default=Black}"/>
+            <Entry x:Name="Label_Smb_Path" />
+            <Button Text="保存" Clicked="Button_Clicked"/>
+            <Button Text="チュートリアル" Clicked="Button_Clicked_Tutorial" Margin="0,10,0,0"/>
+        </StackLayout>
+    </ScrollView>
 </ContentPage>

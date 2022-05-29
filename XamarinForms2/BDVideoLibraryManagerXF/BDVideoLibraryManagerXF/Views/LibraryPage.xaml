@@ -4,6 +4,7 @@
              x:Class="BDVideoLibraryManagerXF.Views.LibraryPage"
              xmlns:vm="clr-namespace:BDVideoLibraryManagerXF.ViewModels"
              xmlns:vc="clr-namespace:BDVideoLibraryManagerXF.ValueConverters"
+             Title="一覧"
              >
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -61,8 +62,8 @@
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
-                                    <Label Grid.Column="0" Text="{Binding Length, StringFormat=\{0:h\\:mm\\:ss\}}" TextColor="{AppThemeBinding Light=Black,Dark=White,Default=Black}" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Small" LineBreakMode="NoWrap"/>
-                                    <Label Grid.Column="1" Text="{Binding ProgramGenre}" LineBreakMode="NoWrap" TextColor="{AppThemeBinding Light=Black,Dark=White,Default=Black}" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Small"/>
+                                    <Label Grid.Column="0" Text="{Binding Length, StringFormat=\{0:h\\:mm\\:ss\}}" TextColor="{AppThemeBinding Light=#666666,Dark=#999999,Default=#666666}" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Small" LineBreakMode="NoWrap"/>
+                                    <Label Grid.Column="1" Text="{Binding ProgramGenre}" LineBreakMode="NoWrap" TextColor="{AppThemeBinding Light=#666666,Dark=#999999,Default=#666666}" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Small"/>
                                 </Grid>
                             </StackLayout>
                         </ViewCell>

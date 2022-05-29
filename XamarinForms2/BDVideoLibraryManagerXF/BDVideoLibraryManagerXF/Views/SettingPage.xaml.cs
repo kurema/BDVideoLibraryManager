@@ -26,33 +26,55 @@ namespace BDVideoLibraryManagerXF.Views
 
         private async void Button_Clicked(object sender, EventArgs e)
         {
-            if(Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None 
-                || (!Xamarin.Essentials.Connectivity.ConnectionProfiles.Any(a => a is Xamarin.Essentials.ConnectionProfile.WiFi or Xamarin.Essentials.ConnectionProfile.Ethernet)))
-            {
-                await DisplayAlert("結果", "ネットワークに接続されていません。", "OK");
-            }
+            var button = sender as Button;
 
-            //SharpCifs.Smb.SmbFile folder;
-            //if (Storages.LibraryStorage.TestAccess(Label_Smb_Name.Text, Label_Smb_Path.Text, Label_Smb_User.Text, Label_Smb_Password.Text,out folder))
-            if (await Storages.LibraryStorage.TryCopy(Label_Smb_Name.Text, Label_Smb_Path.Text, Label_Smb_User.Text, Label_Smb_Password.Text, false))
+            try
             {
-                Storages.SettingStorage.SMBID = Label_Smb_User.Text;
-                Storages.SettingStorage.SMBPassword = Label_Smb_Password.Text;
-                Storages.SettingStorage.SMBPath = Label_Smb_Path.Text;
-                Storages.SettingStorage.SMBServerName = Label_Smb_Name.Text;
-                await DisplayAlert("結果", "アクセスに成功しました。設定を保存します。", "OK");
-                //await Storages.LibraryStorage.CopyToLocal(Label_Smb_Name.Text, Label_Smb_Path.Text, Label_Smb_User.Text, Label_Smb_Password.Text);
-                await Storages.LibraryStorage.TryCopy(Label_Smb_Name.Text, Label_Smb_Path.Text, Label_Smb_User.Text, Label_Smb_Password.Text, true);
-
-                if (Parent is MasterDetailPage)
+                if (button is not null) button.IsEnabled = false;
+                if (Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None
+                    || (!Xamarin.Essentials.Connectivity.ConnectionProfiles.Any(a => a is Xamarin.Essentials.ConnectionProfile.WiFi or Xamarin.Essentials.ConnectionProfile.Ethernet)))
                 {
-                    ((MasterDetailPage)Parent).Detail = new NavigationPage(new LibraryPage() { Title = "一覧" });
+                    await DisplayAlert("結果", "ネットワークに接続されていません。", "OK");
+                    return;
+                }
+
+                //SharpCifs.Smb.SmbFile folder;
+                //if (Storages.LibraryStorage.TestAccess(Label_Smb_Name.Text, Label_Smb_Path.Text, Label_Smb_User.Text, Label_Smb_Password.Text,out folder))
+                if (await Storages.LibraryStorage.TryCopy(Label_Smb_Name.Text, Label_Smb_Path.Text, Label_Smb_User.Text, Label_Smb_Password.Text, false))
+                {
+                    Storages.SettingStorage.SMBID = Label_Smb_User.Text;
+                    Storages.SettingStorage.SMBPassword = Label_Smb_Password.Text;
+                    Storages.SettingStorage.SMBPath = Label_Smb_Path.Text;
+                    Storages.SettingStorage.SMBServerName = Label_Smb_Name.Text;
+                    await DisplayAlert("結果", "アクセスに成功しました。設定を保存します。", "OK");
+                    if (button is not null) button.Text = "ダウンロード中";
+                    //await Storages.LibraryStorage.CopyToLocal(Label_Smb_Name.Text, Label_Smb_Path.Text, Label_Smb_User.Text, Label_Smb_Password.Text);
+                    var result = await Storages.LibraryStorage.TryCopy(Label_Smb_Name.Text, Label_Smb_Path.Text, Label_Smb_User.Text, Label_Smb_Password.Text, true);
+                    if (result) { await Storages.LibraryStorage.LoadLocal(); } else
+                    {
+                        await DisplayAlert("結果", "ダウンロードに失敗しました", "OK");
+                        return;
+                    }
+
+                    if (Parent is MasterDetailPage)
+                    {
+                        ((MasterDetailPage)Parent).Detail = new NavigationPage(new LibraryPage() { Title = "一覧" });
+                    }
+                    else if (Parent is NavigationPage ngp && ngp.Parent is MasterDetailPage mdp)
+                    {
+                        mdp.Detail = new NavigationPage(new LibraryPage() { Title = "一覧" });
+                    }
+                }
+                else
+                {
+                    await DisplayAlert("結果", "アクセスに失敗しました。", "OK");
                 }
             }
-            else
+            finally
             {
-                await DisplayAlert("結果", "アクセスに失敗しました。", "OK");
+                if (button is not null) button.IsEnabled = true;
             }
+
         }
 
         private void Button_Clicked_Tutorial(object sender, EventArgs e)
