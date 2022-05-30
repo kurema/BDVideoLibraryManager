@@ -50,7 +50,7 @@ jobs:
     - name: Android
       run: |
         cd ${{ env.SlnPath }}
-        nuget restore /p:MSBuildProjectExtensionsPath=D:\a\android\obj\
+        msbuild -t:restore /p:BaseIntermediateOutputPath=D:\a\android\obj\ /p:BaseOutputPath=D:\a\android\bin\
         msbuild ${{ env.AndroidCsprojPath }}${{ env.AndroidCsprojName }} /verbosity:normal /t:Rebuild /t:PackageForAndroid /t:SignAndroidPackage /p:Configuration=Release /p:AndroidKeyStore=True /p:AndroidSigningKeyStore=github.keystore /p:AndroidSigningStorePass=${{ secrets.KEYSTORE_PASSWORD }} /p:AndroidSigningKeyAlias=github /p:AndroidSigningKeyPass=${{ secrets.KEYSTORE_PASSWORD }} /p:AndroidPackageFormat=${{ steps.apf.outputs.format }} /p:AotAssemblies=true /p:EnableLLVM=true /p:BaseIntermediateOutputPath=D:\a\android\obj\ /p:BaseOutputPath=D:\a\android\bin\
     - name: Build Apk version
       run: |
