@@ -8,7 +8,8 @@ jobs:
   Android:
     runs-on: windows-latest
     env:
-      SlnPath: XamarinForms2/
+      SlnPathOriginal: XamarinForms2/
+      SlnPath: D:\a/xf/
       AndroidCsprojPath: BDVideoLibraryManagerXF/BDVideoLibraryManagerXF.Android/
       AndroidCsprojName: BDVideoLibraryManagerXF.Android.csproj
       AndroidAppName: com.github.kurema.BDVideoLibraryManager
@@ -29,6 +30,8 @@ jobs:
         echo $KEYSTORE_BASE64 | base64 --decode > ${{ env.SlnPath }}${{ env.AndroidCsprojPath }}github.keystore
       env:
         KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64_ENCODED }}
+    - name: Move directory
+      run: Move-Item ${{ env.SlnPathOriginal }} ${{env.SlnPath}}
     - name: Get tag
       id: tag
       if: contains(github.ref, 'tags/v')
@@ -50,12 +53,12 @@ jobs:
     - name: Android
       run: |
         cd ${{ env.SlnPath }}
-        msbuild -t:restore /p:BaseIntermediateOutputPath=D:\a\android\obj\ /p:BaseOutputPath=D:\a\android\bin\
-        msbuild ${{ env.AndroidCsprojPath }}${{ env.AndroidCsprojName }} /verbosity:normal /t:Rebuild /t:PackageForAndroid /t:SignAndroidPackage /p:Configuration=Release /p:AndroidKeyStore=True /p:AndroidSigningKeyStore=github.keystore /p:AndroidSigningStorePass=${{ secrets.KEYSTORE_PASSWORD }} /p:AndroidSigningKeyAlias=github /p:AndroidSigningKeyPass=${{ secrets.KEYSTORE_PASSWORD }} /p:AndroidPackageFormat=${{ steps.apf.outputs.format }} /p:AotAssemblies=true /p:EnableLLVM=true /p:BaseIntermediateOutputPath=D:\a\android\obj\ /p:BaseOutputPath=D:\a\android\bin\
+        nuget restore
+        msbuild ${{ env.AndroidCsprojPath }}${{ env.AndroidCsprojName }} /verbosity:normal /t:Rebuild /t:PackageForAndroid /t:SignAndroidPackage /p:Configuration=Release /p:AndroidKeyStore=True /p:AndroidSigningKeyStore=github.keystore /p:AndroidSigningStorePass=${{ secrets.KEYSTORE_PASSWORD }} /p:AndroidSigningKeyAlias=github /p:AndroidSigningKeyPass=${{ secrets.KEYSTORE_PASSWORD }} /p:AndroidPackageFormat=${{ steps.apf.outputs.format }} /p:AotAssemblies=true /p:EnableLLVM=true
     - name: Build Apk version
       run: |
         cd ${{ env.SlnPath }}
-        msbuild ${{ env.AndroidCsprojPath }}${{ env.AndroidCsprojName }} /verbosity:quiet /t:Build /t:PackageForAndroid /t:SignAndroidPackage /p:Configuration=Release /p:AndroidKeyStore=True /p:AndroidSigningKeyStore=github.keystore /p:AndroidSigningStorePass=${{ secrets.KEYSTORE_PASSWORD }} /p:AndroidSigningKeyAlias=github /p:AndroidSigningKeyPass=${{ secrets.KEYSTORE_PASSWORD }} /p:AndroidPackageFormat=apk /p:AotAssemblies=true /p:EnableLLVM=true  /p:BaseIntermediateOutputPath=D:\a\android\obj\ /p:BaseOutputPath=D:\a\android\bin\
+        msbuild ${{ env.AndroidCsprojPath }}${{ env.AndroidCsprojName }} /verbosity:quiet /t:Build /t:PackageForAndroid /t:SignAndroidPackage /p:Configuration=Release /p:AndroidKeyStore=True /p:AndroidSigningKeyStore=github.keystore /p:AndroidSigningStorePass=${{ secrets.KEYSTORE_PASSWORD }} /p:AndroidSigningKeyAlias=github /p:AndroidSigningKeyPass=${{ secrets.KEYSTORE_PASSWORD }} /p:AndroidPackageFormat=apk /p:AotAssemblies=true /p:EnableLLVM=true
       if: contains(github.ref, 'tags/v')
     - name: delete keystore
       run: |
@@ -64,7 +67,7 @@ jobs:
     - uses: actions/upload-artifact@v2
       with:
         name: Android App
-        path: D:\a/android/bin/Release/${{ env.AndroidAppName }}-Signed.*
+        path: ${{ env.SlnPath }}${{ env.AndroidCsprojPath }}bin/Release/${{ env.AndroidAppName }}-Signed.*
       if: ${{ !contains(github.ref, 'tags/v') }}
     - name: Create release
       id: create_release
@@ -84,7 +87,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: D:\a/android/bin/bin/Release/${{ env.AndroidAppName }}-Signed.aab
+        asset_path: ${{ env.SlnPath }}${{ env.AndroidCsprojPath }}bin/Release/${{ env.AndroidAppName }}-Signed.aab
         asset_name: ${{ env.AndroidAppName }}-Signed.aab
         asset_content_type: application/zip
     - name: Update release asset Apk
@@ -94,13 +97,9 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: D:\a/android/bin/bin/Release/${{ env.AndroidAppName }}-Signed.apk
+        asset_path: ${{ env.SlnPath }}${{ env.AndroidCsprojPath }}bin/Release/${{ env.AndroidAppName }}-Signed.apk
         asset_name: ${{ env.AndroidAppName }}-Signed.apk
         asset_content_type: application/zip
-    - name: delete keystore
-      run: |
-        Remove-Item -Path D:\a\android\* -Recurse
-      if: always()
     - name: Build WPF Neutral
       run: |
         nuget restore
@@ -132,3 +131,7 @@ jobs:
         name: Windows App
         path: Win.zip
       if: ${{ !contains(github.ref, 'tags/v') }}
+    - name: delete directory
+      run: |
+        Remove-Item -Path ${{ env.SlnPath }}* -Recurse
+      if: always()
