@@ -40,7 +40,7 @@ Windows版をダウンロードして、ディスクを取り込み、そのフ�
 Android:
 | | | |
 | -- | -- | -- |
-| ![screenshot android 1](res/screenshot/01.png) | ![screenshot android 2](res/screenshot/02.png) | ![screenshot android 3](res/screenshot/03.png) |
+| ![screenshot android 1](res/screenshot/01.png) | ![screenshot android 2](res/screenshot/tutorial03.png) | ![screenshot android 3](res/screenshot/07.png) |
 | ![screenshot android 4](res/screenshot/04.png) | ![screenshot android 5](res/screenshot/05.png) | ![screenshot android 6](res/screenshot/06.png) |
 
 Windows:
