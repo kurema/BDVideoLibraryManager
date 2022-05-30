@@ -1,0 +1,91 @@
+name: CI on Push and Pull Request
+on:
+  push:
+    tags: 'v*'
+  workflow_dispatch:
+  pull_request:
+jobs:
+  Android:
+    runs-on: macos-latest
+    env:
+      SlnPath: XamarinForms2/
+      AndroidCsprojPath: BDVideoLibraryManagerXF/BDVideoLibraryManagerXF.Android/
+      AndroidCsprojName: BDVideoLibraryManagerXF.Android.csproj
+      AndroidAppName: com.github.kurema.BDVideoLibraryManager
+    steps:
+    - uses: actions/checkout@v1
+# For Windows    
+#    - name: Add msbuild to PATH
+#      uses: microsoft/setup-msbuild@v1.0.3
+    - name: write keystore
+      run: |
+        echo $KEYSTORE_BASE64 | base64 --decode > ${{ env.SlnPath }}${{ env.AndroidCsprojPath }}github.keystore
+      env:
+        KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64_ENCODED }}
+    - name: Get tag
+      id: tag
+      if: contains(github.ref, 'tags/v')
+      uses: dawidd6/action-get-tag@v1
+   - name: Is tagged version
+      id: tagged
+      run: echo '::set-output name=tagged::yes'
+      #https://pione30.hatenablog.com/entry/2021/02/05/015545
+      if: contains(github.ref, 'tags/v')
+    - name: android package format
+      id: apf
+      run: |
+        if [ "${{steps.tagged.outputs.tagged}}" = "yes" ]; then
+          echo '::set-output name=format::aab'
+        else
+          echo '::set-output name=format::apk'
+        fi
+    - name: Android
+      run: |
+        cd ${{ env.SlnPath }}
+        nuget restore
+        msbuild ${{ env.AndroidCsprojPath }}${{ env.AndroidCsprojName }} /verbosity:normal /t:Rebuild /t:PackageForAndroid /t:SignAndroidPackage /p:Configuration=Release /p:AndroidKeyStore=True /p:AndroidSigningKeyStore=github.keystore /p:AndroidSigningStorePass=${{ secrets.KEYSTORE_PASSWORD }} /p:AndroidSigningKeyAlias=github /p:AndroidSigningKeyPass=${{ secrets.KEYSTORE_PASSWORD }} /p:AndroidPackageFormat=${{ steps.apf.outputs.format }} /p:AotAssemblies=true /p:EnableLLVM=true
+    - name: Build Apk version
+      run: |
+        cd ${{ env.SlnPath }}
+        msbuild ${{ env.AndroidCsprojPath }}${{ env.AndroidCsprojName }} /verbosity:quiet /t:Build /t:PackageForAndroid /t:SignAndroidPackage /p:Configuration=Release /p:AndroidKeyStore=True /p:AndroidSigningKeyStore=github.keystore /p:AndroidSigningStorePass=${{ secrets.KEYSTORE_PASSWORD }} /p:AndroidSigningKeyAlias=github /p:AndroidSigningKeyPass=${{ secrets.KEYSTORE_PASSWORD }} /p:AndroidPackageFormat=apk /p:AotAssemblies=true /p:EnableLLVM=true
+      if: contains(github.ref, 'tags/v')
+    - name: delete keystore
+      run: |
+        rm ${{ env.SlnPath }}${{ env.AndroidCsprojPath }}github.keystore
+      if: always()
+    - uses: actions/upload-artifact@v2
+      with:
+        name: Android App
+        path: ${{ env.SlnPath }}${{ env.AndroidCsprojPath }}bin/Release/${{ env.AndroidAppName }}-Signed.*
+      if: ${{ !contains(github.ref, 'tags/v') }}
+    - name: Create release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      if: contains(github.ref, 'tags/v')
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: ${{steps.tag.outputs.tag}}
+        draft: false
+        prerelease: false
+    - name: Update release asset
+      uses: actions/upload-release-asset@v1
+      if: contains(github.ref, 'tags/v')
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ${{ env.SlnPath }}${{ env.AndroidCsprojPath }}bin/Release/${{ env.AndroidAppName }}-Signed.aab
+        asset_name: ${{ env.AndroidAppName }}-Signed.aab
+        asset_content_type: application/zip
+    - name: Update release asset Apk
+      uses: actions/upload-release-asset@v1
+      if: contains(github.ref, 'tags/v')
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ${{ env.SlnPath }}${{ env.AndroidCsprojPath }}bin/Release/${{ env.AndroidAppName }}-Signed.apk
+        asset_name: ${{ env.AndroidAppName }}-Signed.apk
+        asset_content_type: application/zip
