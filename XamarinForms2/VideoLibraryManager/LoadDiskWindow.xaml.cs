@@ -79,6 +79,7 @@ namespace VideoLibraryManager
             }
 
             var p = new System.Diagnostics.Process();
+            p.StartInfo.WorkingDirectory = AppContext.BaseDirectory;
             p.StartInfo.FileName = "bdavinfo.exe";
             p.StartInfo.UseShellExecute = false;
             p.StartInfo.RedirectStandardInput = false;
