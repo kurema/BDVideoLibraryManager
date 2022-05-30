@@ -55,7 +55,7 @@ public static class LibraryStorage
 
         string remotePathTop, remotePathBottom;
         {
-            remotePath = System.Text.RegularExpressions.Regex.Replace(remotePath, @"^[\\/¥]+", "").Replace('\\','/');
+            remotePath = System.Text.RegularExpressions.Regex.Replace(remotePath, @"^[\\/]+", "").Replace('\\','/');
             var match = System.Text.RegularExpressions.Regex.Match(remotePath, "^([^/]+)/(.+)$");
             if (match.Success)
             {
