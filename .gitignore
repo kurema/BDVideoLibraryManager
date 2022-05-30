@@ -259,3 +259,6 @@ paket-files/
 
 # AutoCad backup
 res/model/*.bak
+
+# Logs
+res/GitHub Actions

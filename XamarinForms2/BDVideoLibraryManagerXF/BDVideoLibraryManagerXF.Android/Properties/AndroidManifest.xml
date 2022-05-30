@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="6" android:versionName="1.3.0.0" package="com.github.kurema.BDVideoLibraryManager" android:installLocation="auto">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="6" package="com.github.kurema.BDVideoLibraryManager" android:installLocation="auto" android:versionName="2.0.0.0">
 	<uses-sdk android:minSdkVersion="21" android:targetSdkVersion="31" />
-	<application android:label="BDVideoLibraryManagerXF" android:theme="@style/MainTheme"></application>
+	<application android:label="BDVideoLibraryManagerXF" android:theme="@style/MainTheme" android:icon="@mipmap/icon"></application>
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 	<uses-permission android:name="android.permission.INTERNET" />
 </manifest>

@@ -52,6 +52,7 @@ namespace BDVideoLibraryManagerXF.Views
                     var result = await Storages.LibraryStorage.TryCopy(Label_Smb_Name.Text, Label_Smb_Path.Text, Label_Smb_User.Text, Label_Smb_Password.Text, true);
                     if (result) { Storages.LibraryStorage.LoadLocalData(); } else
                     {
+                        if (button is not null) button.Text = "保存";
                         await DisplayAlert("結果", "ダウンロードに失敗しました", "OK");
                         return;
                     }

@@ -42,15 +42,10 @@ namespace BDVideoLibraryManagerXF.Views
             finally { if (ViewModel != null) ViewModel.IsBusy = false; }
         }
 
-        public async void LoadRemote()
-        {
-            await LibraryPage.LoadRemote(async (a, b, c) => await DisplayAlert(a, b, c), ViewModel, () => TryLoadLocal());
-        }
-
-        private void ListView_Refreshing(object sender, EventArgs e)
+        private async void ListView_Refreshing(object sender, EventArgs e)
         {
             if (ViewModel != null) ViewModel.IsBusy = true;
-            LoadRemote();
+            await LibraryPage.LoadRemote(async (a, b, c) => await DisplayAlert(a, b, c), ViewModel, () => TryLoadLocal());
             if (ViewModel != null) ViewModel.IsBusy = false;
         }
 
