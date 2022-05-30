@@ -97,6 +97,10 @@ jobs:
         asset_path: D:\a/android/bin/bin/Release/${{ env.AndroidAppName }}-Signed.apk
         asset_name: ${{ env.AndroidAppName }}-Signed.apk
         asset_content_type: application/zip
+    - name: delete keystore
+      run: |
+        Remove-Item -Path D:\a\android\* -Recurse
+      if: always()
     - name: Build WPF Neutral
       run: dotnet publish ${{ env.WPFCsprojPath }} -c Release -o outputs\basic
     - name: Build WPF x64
