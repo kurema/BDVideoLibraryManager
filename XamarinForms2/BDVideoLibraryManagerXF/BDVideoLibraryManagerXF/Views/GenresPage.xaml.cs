@@ -16,7 +16,7 @@ namespace BDVideoLibraryManagerXF.Views
         {
             InitializeComponent();
 
-            listViewGenre.ItemsSource = Storages.LibraryStorage.Library?.Genres;
+            listViewGenre.ItemsSource = Storages.LibraryStorage.GetLibraryOrLoad()?.Genres;
         }
 
         async void OnItemSelected(object sender, SelectedItemChangedEventArgs args)

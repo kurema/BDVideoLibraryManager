@@ -50,7 +50,7 @@ namespace BDVideoLibraryManagerXF.Views
                     if (button is not null) button.Text = "ダウンロード中";
                     //await Storages.LibraryStorage.CopyToLocal(Label_Smb_Name.Text, Label_Smb_Path.Text, Label_Smb_User.Text, Label_Smb_Password.Text);
                     var result = await Storages.LibraryStorage.TryCopy(Label_Smb_Name.Text, Label_Smb_Path.Text, Label_Smb_User.Text, Label_Smb_Password.Text, true);
-                    if (result) { await Storages.LibraryStorage.LoadLocal(); } else
+                    if (result) { Storages.LibraryStorage.LoadLocalData(); } else
                     {
                         await DisplayAlert("結果", "ダウンロードに失敗しました", "OK");
                         return;

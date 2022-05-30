@@ -36,12 +36,12 @@
                 <Label Text="{Binding TargetDisc.DiskName, StringFormat='ディスク: {0}'}"  VerticalTextAlignment="Center" />
             </StackLayout>
             <ListView x:Name="LibraryListView"  VerticalOptions="FillAndExpand" IsPullToRefreshEnabled="true" ItemsSource="{Binding Library.Contents}" IsGroupingEnabled="True" GroupDisplayBinding="{Binding}"
-                  Refreshing="ListView_Refreshing" ItemSelected="OnItemSelected" IsRefreshing="{Binding IsBusy, Mode=OneWay}"
+                  Refreshing="ListView_Refreshing" ItemSelected="OnItemSelected" IsRefreshing="{Binding IsBusy, Mode=OneWay}" BackgroundColor="{AppThemeBinding Light=White,Dark=Black,Default=White}"
                   HasUnevenRows="True">
                 <ListView.GroupHeaderTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <Grid Padding="15,10">
+                            <Grid Padding="15,10" BackgroundColor="{AppThemeBinding Light=#DDDDDD,Dark=#222222,Default=#DDDDDD}">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="*"/>

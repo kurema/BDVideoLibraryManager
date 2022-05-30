@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>disable</Nullable>
+    <UseWPF>true</UseWPF>
+    <ApplicationIcon>render3.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="render3.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\VideoLibraryManagerCommon\VideoLibraryManagerCommon.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="bdavinfo.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

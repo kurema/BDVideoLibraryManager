@@ -35,9 +35,9 @@ namespace BDVideoLibraryManagerXF.Views
             {
                 var page = (Page)Activator.CreateInstance(item.TargetType);
                 page.Title = item.Title;
-                if (this.Detail is NavigationPage)
+                if (this.Detail is NavigationPage nvp && nvp.CurrentPage is not SettingPage and not LicensePage)
                 {
-                    await ((NavigationPage) this.Detail).Navigation.PushAsync(page);
+                    await ((NavigationPage)this.Detail).Navigation.PushAsync(page);
                 }
                 else
                 {

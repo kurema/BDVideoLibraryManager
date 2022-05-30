@@ -35,7 +35,7 @@ namespace BDVideoLibraryManagerXF.Views
                     new MasterMenuItem { TargetType=typeof(Views.LibraryDiscPage), Title = "ディスク一覧",Description="ディスク一覧" },
                     new MasterMenuItem{TargetType=typeof(Views.GenresPage),Title="分類",Description="ジャンル検索"},
                     new MasterMenuItem{Title="今日のおまかせ",Description="ランダムで番組選択",Action=(t)=>{
-                        var lib= Storages.LibraryStorage.Library;
+                        var lib= Storages.LibraryStorage.GetLibraryOrLoad();
 
                         if (lib?.Contents == null || lib.Contents.Length == 0)
                             return;

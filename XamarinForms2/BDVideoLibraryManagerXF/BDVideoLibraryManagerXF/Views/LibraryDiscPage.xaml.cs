@@ -19,9 +19,9 @@ namespace BDVideoLibraryManagerXF.Views
         {
             InitializeComponent();
 
-            if (Storages.LibraryStorage.Library != null)
+            if (Storages.LibraryStorage.GetLibraryOrLoad() != null)
             {
-                this.BindingContext = new ViewModels.LibraryViewModel() { FullLibrary = Storages.LibraryStorage.Library };
+                this.BindingContext = new ViewModels.LibraryViewModel() { FullLibrary = Storages.LibraryStorage.GetLibraryOrLoad() };
             }
             else
             {
@@ -29,12 +29,12 @@ namespace BDVideoLibraryManagerXF.Views
             }
         }
 
-        public async void TryLoadLocal()
+        public void TryLoadLocal()
         {
             if (ViewModel != null) ViewModel.IsBusy = true;
             try
             {
-                var lib = await Storages.LibraryStorage.GetLocalData();
+                var lib = Storages.LibraryStorage.GetLibraryOrLoad();
                 if (lib != null)
                     BindingContext = new ViewModels.LibraryViewModel() { FullLibrary = lib };
             }
@@ -59,7 +59,7 @@ namespace BDVideoLibraryManagerXF.Views
             if (e.SelectedItem == null) return;
 
             var lp = new LibraryPage();
-            lp.TargetDisc = Storages.LibraryStorage.Library.Contents.Where((d) => d.DiskName == (e.SelectedItem as VideoLibraryManagerCommon.Library.DiskBD)?.DiskName).First();
+            lp.TargetDisc = Storages.LibraryStorage.GetLibraryOrLoad().Contents.Where((d) => d.DiskName == (e.SelectedItem as VideoLibraryManagerCommon.Library.DiskBD)?.DiskName).First();
             await Navigation.PushAsync(lp);
 
             if (sender is ListView lv) lv.SelectedItem = null;

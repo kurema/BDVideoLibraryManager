@@ -23,6 +23,7 @@ namespace BDVideoLibraryManagerXF.Views
             InitializeComponent();
 
             //https://qiita.com/amay077/items/4c315e7f212834183316
+            //結局Material Iconsからサブセットフォントを作って表示するようにしたのでプラットフォーム依存は不要です。
             //if (Device.RuntimePlatform == Device.Android)
             //{
             //    Search_button.Text = "";
@@ -46,7 +47,7 @@ namespace BDVideoLibraryManagerXF.Views
         public async void LoadLocal()
         {
             if (ViewModel != null) ViewModel.IsBusy = true;
-            var lib = await Storages.LibraryStorage.GetLocalData();
+            var lib = Storages.LibraryStorage.GetLibraryOrLoad();
             if (lib != null)
                 BindingContext = new ViewModels.LibraryViewModel() { FullLibrary = lib };
             if (ViewModel != null) ViewModel.IsBusy = false;
@@ -57,15 +58,14 @@ namespace BDVideoLibraryManagerXF.Views
             if (ViewModel != null) ViewModel.IsBusy = true;
             try
             {
-                var lib = await Storages.LibraryStorage.GetLocalData();
-                if (lib != null)
-                    BindingContext = new ViewModels.LibraryViewModel() { FullLibrary = lib };
+                var lib = Storages.LibraryStorage.GetLibraryOrLoad();
+                if (lib != null) BindingContext = new ViewModels.LibraryViewModel() { FullLibrary = lib };
             }
             catch { }
             finally { if (ViewModel != null) ViewModel.IsBusy = false; }
         }
 
-        public async void LoadRemote()
+        public async Task LoadRemote()
         {
             await LoadRemote(async (a, b, c) => await DisplayAlert(a, b, c), ViewModel, () => TryLoadLocal());
         }
@@ -96,10 +96,10 @@ namespace BDVideoLibraryManagerXF.Views
             }
         }
 
-        private void ListView_Refreshing(object sender, EventArgs e)
+        private async void ListView_Refreshing(object sender, EventArgs e)
         {
             if (ViewModel != null) ViewModel.IsBusy = true;
-            LoadRemote();
+            await LoadRemote();
             if (ViewModel != null) ViewModel.IsBusy = false;
         }
 
@@ -151,19 +151,36 @@ namespace BDVideoLibraryManagerXF.Views
 
             VideoLibraryManagerCommon.Library.DiskVideoPair result = null;
             var list = new VideoLibraryManagerCommon.Library.DiskVideoPairList();
-            if (this.BindingContext is ViewModels.LibraryViewModel)
+            if (this.BindingContext is ViewModels.LibraryViewModel bd)
             {
-                var bd = this.BindingContext as ViewModels.LibraryViewModel;
-                foreach (var disk in bd.Library.Contents)
+                foreach (var disc in bd.Library.Contents)
                 {
-                    foreach (var video in disk.Contents)
+                    foreach (var video in disc.Contents)
                     {
-                        var temp = new VideoLibraryManagerCommon.Library.DiskVideoPair(disk, video);
+                        var temp = new VideoLibraryManagerCommon.Library.DiskVideoPair(disc, video);
                         if (video == item)
                         {
                             result = temp;
                         }
                         list.Add(temp);
+                    }
+                }
+
+                if (list.Count() > maxVideoCount)
+                {
+                    var disc = bd.Library.Contents.FirstOrDefault(a => a.Contains(item));
+                    if (disc is not null)
+                    {
+                        list.Clear();
+                        foreach (var video in disc)
+                        {
+                            var temp = new VideoLibraryManagerCommon.Library.DiskVideoPair(disc, video);
+                            if (video == item)
+                            {
+                                result = temp;
+                            }
+                            list.Add(temp);
+                        }
                     }
                 }
             }

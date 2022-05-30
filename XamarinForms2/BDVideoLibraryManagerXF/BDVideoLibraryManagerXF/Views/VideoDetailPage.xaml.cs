@@ -23,7 +23,7 @@ namespace BDVideoLibraryManagerXF.Views
         {
             if (this.BindingContext is not VideoLibraryManagerCommon.Library.DiskVideoPair bind) return;
             var lp = new LibraryPage();
-            lp.TargetDisc = Storages.LibraryStorage.Library.Contents.Where((d) => d.DiskName == bind.Disk.DiskName).First();
+            lp.TargetDisc = Storages.LibraryStorage.GetLibraryOrLoad().Contents.Where((d) => d.DiskName == bind.Disk.DiskName).First();
             await Navigation.PushAsync(lp);
         }
 
@@ -36,9 +36,9 @@ namespace BDVideoLibraryManagerXF.Views
         {
             if (sender is not Label label) return;
             double sizeSmall = Device.GetNamedSize(NamedSize.Small, typeof(Label));
-            double sizeBody = Device.GetNamedSize(NamedSize.Body, typeof(Label));
-            if (label.FontSize == sizeSmall) label.FontSize = sizeBody;
-            else if (label.FontSize == sizeBody) label.FontSize = sizeSmall;
+            double sizeMedium = Device.GetNamedSize(NamedSize.Medium, typeof(Label));
+            if (label.FontSize == sizeSmall) label.FontSize = sizeMedium;
+            else if (label.FontSize == sizeMedium) label.FontSize = sizeSmall;
         }
     }
 }

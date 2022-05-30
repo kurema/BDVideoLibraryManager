@@ -17,11 +17,16 @@ public static class LibraryStorage
     public static string PathCsv => System.IO.Path.Combine(Xamarin.Essentials.FileSystem.AppDataDirectory, "csv");
     public static string PathCsvTemp => System.IO.Path.Combine(Xamarin.Essentials.FileSystem.AppDataDirectory, "csv.temp");
 
-    public static async Task<Library> GetLocalData()
+    public static Library GetLibraryOrLoad()
+    {
+        return Library ?? LoadLocalData();
+    }
+
+    public static Library LoadLocalData()
     {
         if (!System.IO.Directory.Exists(PathCsv))
         {
-            return null;
+            return Library = new Library(new DiskBD[0]);
         }
         var files = System.IO.Directory.GetFiles(PathCsv);
 
@@ -268,12 +273,7 @@ public static class LibraryStorage
     {
         //return await CopyToLocal(SettingStorage.SMBServerName, SettingStorage.SMBPath, SettingStorage.SMBID, SettingStorage.SMBPassword);
         var result = await TryCopy(SettingStorage.SMBServerName, SettingStorage.SMBPath, SettingStorage.SMBID, SettingStorage.SMBPassword, true);
-        if (result) await LoadLocal();
+        if (result) LoadLocalData();
         return result;
-    }
-
-    public static async Task LoadLocal()
-    {
-        Library = await GetLocalData();
     }
 }

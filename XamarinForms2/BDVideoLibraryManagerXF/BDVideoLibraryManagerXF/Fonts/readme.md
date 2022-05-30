@@ -1,0 +1,2 @@
+search.ttfはMaterial Iconsの虫眼鏡アイコンだけ抜き出したサブセットです。
+容量削減用。
