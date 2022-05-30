@@ -6,7 +6,7 @@ on:
   pull_request:
 jobs:
   Android:
-    runs-on: macos-latest
+    runs-on: windows-latest
     env:
       SlnPath: XamarinForms2/
       AndroidCsprojPath: BDVideoLibraryManagerXF/BDVideoLibraryManagerXF.Android/
@@ -15,8 +15,8 @@ jobs:
     steps:
     - uses: actions/checkout@v1
 # For Windows    
-#    - name: Add msbuild to PATH
-#      uses: microsoft/setup-msbuild@v1.0.3
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@v1.0.3
     - name: write keystore
       run: |
         echo $KEYSTORE_BASE64 | base64 --decode > ${{ env.SlnPath }}${{ env.AndroidCsprojPath }}github.keystore
@@ -33,6 +33,7 @@ jobs:
       if: contains(github.ref, 'tags/v')
     - name: android package format
       id: apf
+      shell: bash
       run: |
         if [ "${{steps.tagged.outputs.tagged}}" = "yes" ]; then
           echo '::set-output name=format::aab'
