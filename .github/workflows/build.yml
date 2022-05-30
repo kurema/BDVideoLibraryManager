@@ -26,7 +26,7 @@ jobs:
       id: tag
       if: contains(github.ref, 'tags/v')
       uses: dawidd6/action-get-tag@v1
-   - name: Is tagged version
+    - name: Is tagged version
       id: tagged
       run: echo '::set-output name=tagged::yes'
       #https://pione30.hatenablog.com/entry/2021/02/05/015545
