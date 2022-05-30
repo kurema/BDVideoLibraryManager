@@ -50,7 +50,7 @@ jobs:
     - name: Android
       run: |
         cd ${{ env.SlnPath }}
-        nuget restore
+        nuget restore /p:MSBuildProjectExtensionsPath=D:\a\android\obj\
         msbuild ${{ env.AndroidCsprojPath }}${{ env.AndroidCsprojName }} /verbosity:normal /t:Rebuild /t:PackageForAndroid /t:SignAndroidPackage /p:Configuration=Release /p:AndroidKeyStore=True /p:AndroidSigningKeyStore=github.keystore /p:AndroidSigningStorePass=${{ secrets.KEYSTORE_PASSWORD }} /p:AndroidSigningKeyAlias=github /p:AndroidSigningKeyPass=${{ secrets.KEYSTORE_PASSWORD }} /p:AndroidPackageFormat=${{ steps.apf.outputs.format }} /p:AotAssemblies=true /p:EnableLLVM=true /p:BaseIntermediateOutputPath=D:\a\android\obj\ /p:BaseOutputPath=D:\a\android\bin\
     - name: Build Apk version
       run: |
@@ -102,7 +102,9 @@ jobs:
         Remove-Item -Path D:\a\android\* -Recurse
       if: always()
     - name: Build WPF Neutral
-      run: dotnet publish ${{ env.WPFCsprojPath }} -c Release -o outputs\basic
+      run: |
+        nuget restore
+        dotnet publish ${{ env.WPFCsprojPath }} -c Release -o outputs\basic
     - name: Build WPF x64
       run: dotnet publish ${{ env.WPFCsprojPath }} -c Release -a win-x64 --self-contained true -p:PublishTrimmed=false -p:PublishSingleFile=true -p:PublishReadyToRun=true -o outputs\win\x64
     - name: Build WPF x86
