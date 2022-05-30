@@ -100,15 +100,18 @@ jobs:
         asset_name: ${{ env.AndroidAppName }}-Signed.apk
         asset_content_type: application/zip
     - name: Build WPF Neutral
-      run: dotnet publish ${{ env.WPFCsprojPath }} -c Release -o outputs\basic
+      run: |
+        cd ${{ env.SlnPath }}
+        nuget restore
+        dotnet publish ${{ env.WPFCsprojPath }} -c Release -o outputs\basic
     - name: Build WPF x64
-      run: dotnet publish ${{ env.WPFCsprojPath }} -c Release -a win-x64 --self-contained true -p:PublishTrimmed=false -p:PublishSingleFile=true -p:PublishReadyToRun=true -o outputs\win\x64
+      run: dotnet publish ${{ env.SlnPath }}${{ env.WPFCsprojPath }} -c Release -a win-x64 --self-contained true -p:PublishTrimmed=false -p:PublishSingleFile=true -p:PublishReadyToRun=true -o outputs\win\x64
     - name: Build WPF x86
-      run: dotnet publish ${{ env.WPFCsprojPath }} -c Release -a win-x86 --self-contained true -p:PublishTrimmed=false -p:PublishSingleFile=true -p:PublishReadyToRun=true -o outputs\win\x86
+      run: dotnet publish ${{ env.SlnPath }}${{ env.WPFCsprojPath }} -c Release -a win-x86 --self-contained true -p:PublishTrimmed=false -p:PublishSingleFile=true -p:PublishReadyToRun=true -o outputs\win\x86
     - name: Build WPF arm
-      run: dotnet publish ${{ env.WPFCsprojPath }} -c Release -a win-arm --self-contained true -p:PublishTrimmed=false -p:PublishSingleFile=true -p:PublishReadyToRun=true -o outputs\win\arm
+      run: dotnet publish ${{ env.SlnPath }}${{ env.WPFCsprojPath }} -c Release -a win-arm --self-contained true -p:PublishTrimmed=false -p:PublishSingleFile=true -p:PublishReadyToRun=true -o outputs\win\arm
     - name: Build WPF arm64
-      run: dotnet publish ${{ env.WPFCsprojPath }} -c Release -a win-arm64 --self-contained true -p:PublishTrimmed=false -p:PublishSingleFile=true -p:PublishReadyToRun=true -o outputs\win\arm64
+      run: dotnet publish ${{ env.SlnPath }}${{ env.WPFCsprojPath }} -c Release -a win-arm64 --self-contained true -p:PublishTrimmed=false -p:PublishSingleFile=true -p:PublishReadyToRun=true -o outputs\win\arm64
     - name: Archive packages
       shell: pwsh
       run: |
