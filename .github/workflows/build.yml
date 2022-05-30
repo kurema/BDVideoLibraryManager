@@ -51,11 +51,11 @@ jobs:
       run: |
         cd ${{ env.SlnPath }}
         nuget restore
-        msbuild ${{ env.AndroidCsprojPath }}${{ env.AndroidCsprojName }} /verbosity:normal /t:Rebuild /t:PackageForAndroid /t:SignAndroidPackage /p:Configuration=Release /p:AndroidKeyStore=True /p:AndroidSigningKeyStore=github.keystore /p:AndroidSigningStorePass=${{ secrets.KEYSTORE_PASSWORD }} /p:AndroidSigningKeyAlias=github /p:AndroidSigningKeyPass=${{ secrets.KEYSTORE_PASSWORD }} /p:AndroidPackageFormat=${{ steps.apf.outputs.format }} /p:AotAssemblies=true /p:EnableLLVM=true
+        msbuild ${{ env.AndroidCsprojPath }}${{ env.AndroidCsprojName }} /verbosity:normal /t:Rebuild /t:PackageForAndroid /t:SignAndroidPackage /p:Configuration=Release /p:AndroidKeyStore=True /p:AndroidSigningKeyStore=github.keystore /p:AndroidSigningStorePass=${{ secrets.KEYSTORE_PASSWORD }} /p:AndroidSigningKeyAlias=github /p:AndroidSigningKeyPass=${{ secrets.KEYSTORE_PASSWORD }} /p:AndroidPackageFormat=${{ steps.apf.outputs.format }} /p:AotAssemblies=true /p:EnableLLVM=true /p:BaseIntermediateOutputPath=D:\a\android\obj /p:BaseOutputPath=D:\a\android\bin
     - name: Build Apk version
       run: |
         cd ${{ env.SlnPath }}
-        msbuild ${{ env.AndroidCsprojPath }}${{ env.AndroidCsprojName }} /verbosity:quiet /t:Build /t:PackageForAndroid /t:SignAndroidPackage /p:Configuration=Release /p:AndroidKeyStore=True /p:AndroidSigningKeyStore=github.keystore /p:AndroidSigningStorePass=${{ secrets.KEYSTORE_PASSWORD }} /p:AndroidSigningKeyAlias=github /p:AndroidSigningKeyPass=${{ secrets.KEYSTORE_PASSWORD }} /p:AndroidPackageFormat=apk /p:AotAssemblies=true /p:EnableLLVM=true
+        msbuild ${{ env.AndroidCsprojPath }}${{ env.AndroidCsprojName }} /verbosity:quiet /t:Build /t:PackageForAndroid /t:SignAndroidPackage /p:Configuration=Release /p:AndroidKeyStore=True /p:AndroidSigningKeyStore=github.keystore /p:AndroidSigningStorePass=${{ secrets.KEYSTORE_PASSWORD }} /p:AndroidSigningKeyAlias=github /p:AndroidSigningKeyPass=${{ secrets.KEYSTORE_PASSWORD }} /p:AndroidPackageFormat=apk /p:AotAssemblies=true /p:EnableLLVM=true  /p:BaseIntermediateOutputPath=D:\a\android\obj /p:BaseOutputPath=D:\a\android\bin
       if: contains(github.ref, 'tags/v')
     - name: delete keystore
       run: |
@@ -64,7 +64,7 @@ jobs:
     - uses: actions/upload-artifact@v2
       with:
         name: Android App
-        path: ${{ env.SlnPath }}${{ env.AndroidCsprojPath }}bin/Release/${{ env.AndroidAppName }}-Signed.*
+        path: D:\a/android/bin/Release/${{ env.AndroidAppName }}-Signed.*
       if: ${{ !contains(github.ref, 'tags/v') }}
     - name: Create release
       id: create_release
@@ -84,7 +84,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ${{ env.SlnPath }}${{ env.AndroidCsprojPath }}bin/Release/${{ env.AndroidAppName }}-Signed.aab
+        asset_path: D:\a/android/bin/bin/Release/${{ env.AndroidAppName }}-Signed.aab
         asset_name: ${{ env.AndroidAppName }}-Signed.aab
         asset_content_type: application/zip
     - name: Update release asset Apk
@@ -94,7 +94,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ${{ env.SlnPath }}${{ env.AndroidCsprojPath }}bin/Release/${{ env.AndroidAppName }}-Signed.apk
+        asset_path: D:\a/android/bin/bin/Release/${{ env.AndroidAppName }}-Signed.apk
         asset_name: ${{ env.AndroidAppName }}-Signed.apk
         asset_content_type: application/zip
     - name: Build WPF Neutral
