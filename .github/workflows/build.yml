@@ -92,32 +92,31 @@ jobs:
         asset_name: ${{ env.AndroidAppName }}-Signed.apk
         asset_content_type: application/zip
     - name: Build WPF Neutral
-      if: contains(github.ref, 'tags/v')
       run: dotnet publish ${{ env.WPFCsprojPath }} -c Release -o outputs\basic
     - name: Build WPF x64
-      if: contains(github.ref, 'tags/v')
       run: dotnet publish ${{ env.WPFCsprojPath }} -c Release -a win-x64 --self-contained true -p:PublishTrimmed=false -p:PublishSingleFile=true -p:PublishReadyToRun=true -o outputs\win\x64
     - name: Build WPF x86
-      if: contains(github.ref, 'tags/v')
       run: dotnet publish ${{ env.WPFCsprojPath }} -c Release -a win-x86 --self-contained true -p:PublishTrimmed=false -p:PublishSingleFile=true -p:PublishReadyToRun=true -o outputs\win\x86
     - name: Build WPF arm
-      if: contains(github.ref, 'tags/v')
       run: dotnet publish ${{ env.WPFCsprojPath }} -c Release -a win-arm --self-contained true -p:PublishTrimmed=false -p:PublishSingleFile=true -p:PublishReadyToRun=true -o outputs\win\arm
     - name: Build WPF arm64
-      if: contains(github.ref, 'tags/v')
       run: dotnet publish ${{ env.WPFCsprojPath }} -c Release -a win-arm64 --self-contained true -p:PublishTrimmed=false -p:PublishSingleFile=true -p:PublishReadyToRun=true -o outputs\win\arm64
     - name: Archive packages
-      if: contains(github.ref, 'tags/v')
       shell: pwsh
       run: |
-        Compress-Archive -Path outputs\win -DestinationPath win.zip
-    - name: Update release asset Apk
+        Compress-Archive -Path outputs\win -DestinationPath Win.zip
+    - name: Update Windows binary
       uses: actions/upload-release-asset@v1
       if: contains(github.ref, 'tags/v')
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: win.zip
+        asset_path: Win.zip
         asset_name: Windows.zip
         asset_content_type: application/zip
+    - uses: actions/upload-artifact@v2
+      with:
+        name: Windows App
+        path: Win.zip
+      if: ${{ !contains(github.ref, 'tags/v') }}
