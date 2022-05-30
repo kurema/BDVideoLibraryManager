@@ -16,6 +16,12 @@ jobs:
     steps:
     - uses: actions/checkout@v1
 # For Windows    
+    - name: Configure Pagefile
+      uses: al-cheb/configure-pagefile-action@v1.2
+      with:
+        minimum-size: 32GB
+        maximum-size: 32GB
+        disk-root: "C:"
     - name: Add msbuild to PATH
       uses: microsoft/setup-msbuild@v1.0.3
     - name: write keystore
