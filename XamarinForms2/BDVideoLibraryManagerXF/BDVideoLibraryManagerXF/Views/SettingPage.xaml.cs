@@ -19,7 +19,7 @@ namespace BDVideoLibraryManagerXF.Views
             InitializeComponent();
 
             Label_Smb_User.Text = Storages.SettingStorage.SMBID;
-            Label_Smb_Password.Text = Storages.SettingStorage.SMBPassword;
+            Task.Run(async () => Label_Smb_Password.Text = await Storages.SettingStorage.GetSMBPassword());
             Label_Smb_Path.Text = Storages.SettingStorage.SMBPath;
             Label_Smb_Name.Text = Storages.SettingStorage.SMBServerName;
         }
@@ -43,9 +43,9 @@ namespace BDVideoLibraryManagerXF.Views
                 if (await Storages.LibraryStorage.TryCopy(Label_Smb_Name.Text, Label_Smb_Path.Text, Label_Smb_User.Text, Label_Smb_Password.Text, false))
                 {
                     Storages.SettingStorage.SMBID = Label_Smb_User.Text;
-                    Storages.SettingStorage.SMBPassword = Label_Smb_Password.Text;
                     Storages.SettingStorage.SMBPath = Label_Smb_Path.Text;
                     Storages.SettingStorage.SMBServerName = Label_Smb_Name.Text;
+                    await Storages.SettingStorage.SetSMBPassword(Label_Smb_Password.Text);
                     await DisplayAlert("結果", "アクセスに成功しました。設定を保存します。", "OK");
                     if (button is not null) button.Text = "ダウンロード中";
                     //await Storages.LibraryStorage.CopyToLocal(Label_Smb_Name.Text, Label_Smb_Path.Text, Label_Smb_User.Text, Label_Smb_Password.Text);

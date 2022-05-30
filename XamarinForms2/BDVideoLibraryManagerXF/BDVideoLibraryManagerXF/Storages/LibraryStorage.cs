@@ -55,6 +55,7 @@ public static class LibraryStorage
 
         string remotePathTop, remotePathBottom;
         {
+            remotePath = System.Text.RegularExpressions.Regex.Replace(remotePath, @"^[\\/¥]+", "").Replace('\\','/');
             var match = System.Text.RegularExpressions.Regex.Match(remotePath, "^([^/]+)/(.+)$");
             if (match.Success)
             {
@@ -272,7 +273,7 @@ public static class LibraryStorage
     public static async Task<bool> CopyToLocal()
     {
         //return await CopyToLocal(SettingStorage.SMBServerName, SettingStorage.SMBPath, SettingStorage.SMBID, SettingStorage.SMBPassword);
-        var result = await TryCopy(SettingStorage.SMBServerName, SettingStorage.SMBPath, SettingStorage.SMBID, SettingStorage.SMBPassword, true);
+        var result = await TryCopy(SettingStorage.SMBServerName, SettingStorage.SMBPath, SettingStorage.SMBID, await SettingStorage.GetSMBPassword(), true);
         if (result) LoadLocalData();
         return result;
     }

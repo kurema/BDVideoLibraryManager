@@ -11,16 +11,28 @@ namespace BDVideoLibraryManagerXF.Storages
     {
         public static bool IsSet => !IsNullOrEmpty(SMBServerName);
 
-        public static string SMBPassword
+        public async static Task<string> GetSMBPassword()
         {
-            get
+            try
             {
-                var result = GetProperty("SMBPassword") as string;
-                if (result == null) return "";
-                return result;
+                return (GetProperty("SMBPassword") as string) ?? await Xamarin.Essentials.SecureStorage.GetAsync("SMBPassword") ?? "";
             }
-            set
+            catch
             {
+                return "";
+            }
+        }
+
+        public async static Task SetSMBPassword(string value)
+        {
+            try
+            {
+                await Xamarin.Essentials.SecureStorage.SetAsync("SMBPassword", value);
+                SetProprty("SMBPassword", null);
+            }
+            catch
+            {
+                //非対応機種ではセキュリティで保護されていないストレージを使います。
                 SetProprty("SMBPassword", value);
             }
         }
@@ -76,7 +88,7 @@ namespace BDVideoLibraryManagerXF.Storages
 
         }
 
-        public static void SetProprty(string key,object value)
+        public static void SetProprty(string key, object value)
         {
             if (Xamarin.Forms.Application.Current.Properties.ContainsKey(key))
                 Xamarin.Forms.Application.Current.Properties[key] = value;
