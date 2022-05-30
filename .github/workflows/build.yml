@@ -25,13 +25,13 @@ jobs:
         disk-root: "C:"
     - name: Add msbuild to PATH
       uses: microsoft/setup-msbuild@v1.0.3
+    - name: Move directory
+      run: Move-Item ${{ env.SlnPathOriginal }} ${{env.SlnPath}}
     - name: write keystore
       run: |
         echo $KEYSTORE_BASE64 | base64 --decode > ${{ env.SlnPath }}${{ env.AndroidCsprojPath }}github.keystore
       env:
         KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64_ENCODED }}
-    - name: Move directory
-      run: Move-Item ${{ env.SlnPathOriginal }} ${{env.SlnPath}}
     - name: Get tag
       id: tag
       if: contains(github.ref, 'tags/v')
