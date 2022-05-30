@@ -1,4 +1,4 @@
-#/bin/sh
+#!/bin/sh
 mkdir mipmap-mdpi
 convert -resize 48x48 org.png mipmap-mdpi/icon.png
 convert -resize 80x80 -background transparent -gravity center -extent 108x108 org.png mipmap-mdpi/launcher_foreground.png
