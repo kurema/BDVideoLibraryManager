@@ -263,3 +263,5 @@ res/model/*.bak
 
 # Logs
 res/GitHub Actions
+res/v1.x/*.7z
+
