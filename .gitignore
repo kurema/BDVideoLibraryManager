@@ -253,6 +253,7 @@ paket-files/
 
 # Key
 *.keystore
+res/key
 
 # APK
 *.apk
