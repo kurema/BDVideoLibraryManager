@@ -30,9 +30,9 @@ Androidアプリ単独では意味がありません。
   * "all"を選べば基本的にどの環境でも動作します。
   * それ以外は自分の環境に合わせて選択してください(基本的にx64です)。ファイル名が少ないのですっきりします。
   * 共有フォルダに配置することを想定しているので、ネットワーク上の他のコンピューターでも動作するように選択してください。
-4. VideoLibraryManager.exeを実行し、取り込む(取り込み→ドライブ・ディスク名指定→取り込み)。
-5. 当該フォルダをファイル共有。あるいはNAS上などに移動。
-6. Android版をインストール。設定を選び、サーバー名・パス・ユーザー名・パスワードを設定。これでキャッシュされる。データ更新時には、一覧画面でプルダウンすれば再ダウンロード可能。
+3. VideoLibraryManager.exeを実行し、取り込む(取り込み→ドライブ・ディスク名指定→取り込み)。
+4. 当該フォルダをファイル共有。あるいはNAS上などに移動。
+5. [Android版](https://play.google.com/store/apps/details?id=com.github.kurema.BDVideoLibraryManager&utm_source=github&utm_campaign=GitHub_Readme&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1)をインストール。設定を選び、サーバー名・パス・ユーザー名・パスワードを設定。これでキャッシュされる。データ更新時には、一覧画面でプルダウンすれば再ダウンロード可能。
 
 ### バッチファイルを使う場合。
 
