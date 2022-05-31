@@ -3,14 +3,13 @@
 [![MIT License](http://img.shields.io/badge/license-MIT-brightgreen.svg)](LICENSE)
 [![Build Android and WPF](https://github.com/kurema/BDVideoLibraryManager/actions/workflows/build.yml/badge.svg)](https://github.com/kurema/BDVideoLibraryManager/actions/workflows/build.yml)
 
-## Access
-<a href='https://play.google.com/store/apps/details?id=com.github.kurema.BDVideoLibraryManager&utm_source=github&utm_campaign=GitHub_Readme&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Google Play で手に入れよう' src='https://play.google.com/intl/ja/badges/static/images/badges/ja_badge_web_generic.png' style='width:150px;'/></a>
-
-[最新リリース](https://github.com/kurema/BDVideoLibraryManager/releases/latest)
+| Google Play | Releases |
+| -- | -- |
+| <a href='https://play.google.com/store/apps/details?id=com.github.kurema.BDVideoLibraryManager&utm_source=github&utm_campaign=GitHub_Readme&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Google Play で手に入れよう' src='https://play.google.com/intl/ja/badges/static/images/badges/ja_badge_web_generic.png' style='width:150px;'/></a> | [最新リリース](https://github.com/kurema/BDVideoLibraryManager/releases/latest) |
 
 ## Info
 Androidアプリ単独では意味がありません。
-Windows版をダウンロードして、ディスクを取り込み、そのフォルダを共有してください。
+[最新Release](https://github.com/kurema/BDVideoLibraryManager/releases/latest)からWindows版をダウンロードして、ディスクを取り込み、そのフォルダを共有してください。
 
 ## About
 このツールは以下の3つの機能を含みます。
@@ -59,7 +58,13 @@ Windows:
 
 ## Thanks
 以下の協力を以て本ツールは作られています。
-* BD-AVに含まれる情報の取得には Vesti La Giubba様の[bdavinfo](http://saysaysay.net/bdavtool/bdavinfo)を利用しています。
+* BD-AVに含まれる情報の取得には Vesti La Giubba様の[bdavinfo](https://web.archive.org/web/20170429155508/http://saysaysay.net/bdavtool/bdavinfo)を利用しています。
 * CSVファイルの解析にはJoshClose様のCsvHelperを利用しています。
 * SMBへのアクセスには[TalAloni](https://github.com/TalAloni/)様の[SMBLibrary](https://github.com/TalAloni/SMBLibrary)を利用しています。
 * このアプリはXamarin Formsで作られています。
+
+## 関連
+| リンク | 詳細 |
+| -- | -- |
+| [kurema/bdavinfo](https://github.com/kurema/bdavinfo) | bdavinfoのミラー。[Tools/bdavinfo21.zip](Tools/bdavinfo21.zip)と内容は同じ。 |
+| [arcatdmz/bdavinfo-csv-to-html](https://github.com/arcatdmz/bdavinfo-csv-to-html) | bdavinfoの出力をHTMLに変換するツール。 |
