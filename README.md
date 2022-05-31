@@ -63,7 +63,7 @@ Windows:
 * SMBへのアクセスには[TalAloni](https://github.com/TalAloni/)様の[SMBLibrary](https://github.com/TalAloni/SMBLibrary)を利用しています。
 * このアプリはXamarin Formsで作られています。
 
-## 関連
+## Links
 | リンク | 詳細 |
 | -- | -- |
 | [kurema/bdavinfo](https://github.com/kurema/bdavinfo) | bdavinfoのミラー。[Tools/bdavinfo21.zip](Tools/bdavinfo21.zip)と内容は同じ。 |
