@@ -1,8 +1,12 @@
 # BDVideoLibraryManager
-## Access
-[Androidアプリ](https://play.google.com/store/apps/details?id=com.github.kurema.BDVideoLibraryManager)
+[![release](https://img.shields.io/github/v/release/kurema/BDVideoLibraryManager)](https://github.com/kurema/BDVideoLibraryManager/releases/latest)
+[![MIT License](http://img.shields.io/badge/license-MIT-brightgreen.svg)](LICENSE)
+[![Build Android and WPF](https://github.com/kurema/BDVideoLibraryManager/actions/workflows/build.yml/badge.svg)](https://github.com/kurema/BDVideoLibraryManager/actions/workflows/build.yml)
 
-[Windows版](https://github.com/kurema/BDVideoLibraryManager/releases/latest)
+## Access
+<a href='https://play.google.com/store/apps/details?id=com.github.kurema.BDVideoLibraryManager&utm_source=github&utm_campaign=GitHub_Readme&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Google Play で手に入れよう' src='https://play.google.com/intl/ja/badges/static/images/badges/ja_badge_web_generic.png' style='width:150px;'/></a>
+
+[最新リリース](https://github.com/kurema/BDVideoLibraryManager/releases/latest)
 
 ## Info
 Androidアプリ単独では意味がありません。
@@ -38,7 +42,7 @@ Windows版をダウンロードして、ディスクを取り込み、そのフ�
 3. ドライブにBDを一枚づつ挿入。その度にcopy.batを実行する(挿入から読み込みまで多少の時間を要します)。
 4. 全てのBDドライブを読み込んだらrpls2csv.batを実行する。
 5. できたcsvフォルダを適当な場所に移動して、共有フォルダやNASのCIFS/SMB機能でLan内に公開。
-6. csv/の上層フォルダにWindows版(releases→Win.zipを展開)を配置。これでWindowsで閲覧ができる。
+6. csv/の上層フォルダにWindows版(releases→Win.zipを展開)を配置。これでWindowsで閲覧ができます。
 
 ## Screenshots
 Android:
