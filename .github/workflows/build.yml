@@ -8,7 +8,7 @@ jobs:
   Android:
     runs-on: windows-latest
     env:
-      SlnPathOriginal: XamarinForms2/
+      SlnPathOriginal: src/
       SlnPath: D:\a/xf/
       AndroidCsprojPath: BDVideoLibraryManagerXF/BDVideoLibraryManagerXF.Android/
       AndroidCsprojName: BDVideoLibraryManagerXF.Android.csproj
@@ -40,7 +40,7 @@ jobs:
       run: echo '::set-output name=tagged::yes'
       #https://pione30.hatenablog.com/entry/2021/02/05/015545
       if: contains(github.ref, 'tags/v')
-    - name: android package format
+    - name: Require Android package format
       id: apf
       shell: bash
       run: |
@@ -59,11 +59,12 @@ jobs:
         cd ${{ env.SlnPath }}
         msbuild ${{ env.AndroidCsprojPath }}${{ env.AndroidCsprojName }} /verbosity:quiet /t:Build /t:PackageForAndroid /t:SignAndroidPackage /p:Configuration=Release /p:AndroidKeyStore=True /p:AndroidSigningKeyStore=github.keystore /p:AndroidSigningStorePass=${{ secrets.KEYSTORE_PASSWORD }} /p:AndroidSigningKeyAlias=github /p:AndroidSigningKeyPass=${{ secrets.KEYSTORE_PASSWORD }} /p:AndroidPackageFormat=apk /p:AotAssemblies=true /p:EnableLLVM=true
       if: contains(github.ref, 'tags/v')
-    - name: delete keystore
+    - name: Delete keystore
       run: |
         rm ${{ env.SlnPath }}${{ env.AndroidCsprojPath }}github.keystore
       if: always()
-    - uses: actions/upload-artifact@v2
+    - name: Updload artifact Android
+      uses: actions/upload-artifact@v2
       with:
         name: Android App
         path: ${{ env.SlnPath }}${{ env.AndroidCsprojPath }}bin/Release/${{ env.AndroidAppName }}-Signed.*
@@ -122,12 +123,13 @@ jobs:
         asset_path: ${{ env.SlnPath }}Win.zip
         asset_name: Windows.zip
         asset_content_type: application/zip
-    - uses: actions/upload-artifact@v2
+    - name: Updload artifact WPF
+      uses: actions/upload-artifact@v2
       with:
         name: Windows App
         path: ${{ env.SlnPath }}Win.zip
       if: ${{ !contains(github.ref, 'tags/v') }}
-    - name: delete directory
+    - name: Delete moved directory
       run: |
         Remove-Item -Path ${{ env.SlnPath }}* -Recurse
       if: always()
