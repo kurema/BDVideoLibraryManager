@@ -12,6 +12,7 @@ namespace BDVideoLibraryManagerXF.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class SettingPage : ContentPage
     {
+        private const string TitleResult = "結果";
         public MasterDetailPage ParentMasterDetailPage;
 
         public SettingPage()
@@ -28,32 +29,37 @@ namespace BDVideoLibraryManagerXF.Views
         {
             var button = sender as Button;
 
+            string smbName = Label_Smb_Name.Text;
+            string smbPath = Label_Smb_Path.Text;
+            string smbUser = Label_Smb_User.Text;
+            string smbPW = Label_Smb_Password.Text;
+
             try
             {
                 if (button is not null) button.IsEnabled = false;
                 if (Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None
                     || (!Xamarin.Essentials.Connectivity.ConnectionProfiles.Any(a => a is Xamarin.Essentials.ConnectionProfile.WiFi or Xamarin.Essentials.ConnectionProfile.Ethernet)))
                 {
-                    await DisplayAlert("結果", "ネットワークに接続されていません。", "OK");
+                    await DisplayAlert(TitleResult, "ネットワークに接続されていません。", "OK");
                     return;
                 }
 
                 //SharpCifs.Smb.SmbFile folder;
                 //if (Storages.LibraryStorage.TestAccess(Label_Smb_Name.Text, Label_Smb_Path.Text, Label_Smb_User.Text, Label_Smb_Password.Text,out folder))
-                if (await Storages.LibraryStorage.TryCopy(Label_Smb_Name.Text, Label_Smb_Path.Text, Label_Smb_User.Text, Label_Smb_Password.Text, false))
+                if (await Storages.LibraryStorage.TryCopy(smbName, smbPath, smbUser, smbPW, false))
                 {
-                    Storages.SettingStorage.SMBID = Label_Smb_User.Text;
-                    Storages.SettingStorage.SMBPath = Label_Smb_Path.Text;
-                    Storages.SettingStorage.SMBServerName = Label_Smb_Name.Text;
-                    await Storages.SettingStorage.SetSMBPassword(Label_Smb_Password.Text);
-                    await DisplayAlert("結果", "アクセスに成功しました。設定を保存します。", "OK");
+                    Storages.SettingStorage.SMBID = smbUser;
+                    Storages.SettingStorage.SMBPath = smbPath;
+                    Storages.SettingStorage.SMBServerName = smbName;
+                    await Storages.SettingStorage.SetSMBPassword(smbPW);
+                    await DisplayAlert(TitleResult, "アクセスに成功しました。設定を保存します。", "OK");
                     if (button is not null) button.Text = "ダウンロード中";
                     //await Storages.LibraryStorage.CopyToLocal(Label_Smb_Name.Text, Label_Smb_Path.Text, Label_Smb_User.Text, Label_Smb_Password.Text);
-                    var result = await Storages.LibraryStorage.TryCopy(Label_Smb_Name.Text, Label_Smb_Path.Text, Label_Smb_User.Text, Label_Smb_Password.Text, true);
+                    var result = await Storages.LibraryStorage.TryCopy(smbName, smbPath, smbUser, smbPW, true);
                     if (result) { Storages.LibraryStorage.LoadLocalData(); } else
                     {
                         if (button is not null) button.Text = "保存";
-                        await DisplayAlert("結果", "ダウンロードに失敗しました", "OK");
+                        await DisplayAlert(TitleResult, "ダウンロードに失敗しました", "OK");
                         return;
                     }
 
@@ -66,9 +72,13 @@ namespace BDVideoLibraryManagerXF.Views
                         mdp.Detail = new NavigationPage(new LibraryPage() { Title = "一覧" });
                     }
                 }
+                else if (smbPath.Contains("￥"))
+                {
+                    await DisplayAlert(TitleResult, "アクセスに失敗しました。\nパスに全角「￥」が含まれています。\nパスの区切りは\"/\"または\"\\\"です。", "OK");
+                }
                 else
                 {
-                    await DisplayAlert("結果", "アクセスに失敗しました。", "OK");
+                    await DisplayAlert(TitleResult, "アクセスに失敗しました。", "OK");
                 }
             }
             finally
