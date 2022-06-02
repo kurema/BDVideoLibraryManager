@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Foundation;
+using ObjCRuntime;
 using UIKit;
 
 namespace BDVideoLibraryManagerXF.iOS
@@ -27,5 +28,11 @@ namespace BDVideoLibraryManagerXF.iOS
 
             return base.FinishedLaunching(app, options);
         }
+
+        //https://github.com/xamarin/xamarin-macios/issues/4072
+        //overrideのサジェスト以下がエラー込みで混ざったんだけど何？
+        //[BlockProxy(typeof(NIDUIOperationHandler))]
+        public override void PerformActionForShortcutItem(UIApplication application, UIApplicationShortcutItem shortcutItem, UIOperationHandler completionHandler) 
+            => Xamarin.Essentials.Platform.PerformActionForShortcutItem(application, shortcutItem, completionHandler);
     }
 }

@@ -49,5 +49,38 @@ namespace BDVideoLibraryManagerXF.Views
             IsPresented = false;
             MasterSide.ListView.SelectedItem = null;
         }
+
+        public async Task ChooseRandomPage()
+        {
+            var t = this;
+            var lib = Storages.LibraryStorage.GetLibraryOrLoad();
+
+            if (lib?.Contents == null || lib.Contents.Length == 0)
+                return;
+
+            var pl = new VideoLibraryManagerCommon.Library.DiskVideoPairList();
+            foreach (var disk in lib.Contents)
+            {
+                foreach (var video in disk.Contents)
+                {
+                    pl.Add(new VideoLibraryManagerCommon.Library.DiskVideoPair(disk, video));
+                }
+            }
+            if (pl.Count == 0) return;
+
+            Random rd = new Random((int)(DateTime.Now.Date.Ticks / TimeSpan.FromDays(1).Ticks));
+            var todaysprog = pl.OrderBy(a => a.Video.Length.TotalMilliseconds).ToArray()[rd.Next(pl.Count)];
+
+            var page = (Page)Activator.CreateInstance(typeof(Views.VideoDetailPage), todaysprog);
+            page.Title = "今日のおまかせ";
+            if (t.Detail is NavigationPage)
+            {
+                await (t.Detail as NavigationPage).PushAsync(page);
+            }
+            else
+            {
+                t.Detail = new NavigationPage(page);
+            }
+        }
     }
 }

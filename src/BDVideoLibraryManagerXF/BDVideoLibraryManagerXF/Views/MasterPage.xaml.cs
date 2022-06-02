@@ -24,45 +24,26 @@ namespace BDVideoLibraryManagerXF.Views
             this.BindingContext = new MasterViewModel();
         }
 
-        class MasterViewModel : INotifyPropertyChanged
+        public class MasterViewModel : INotifyPropertyChanged
         {
+            public const string HeaderLibraryPage = "一覧";
+            public const string HeaderLibraryDiscPage = "ディスク一覧";
+            public const string HeaderGenresPage = "分類";
+            public const string HeaderRandomMovie = "今日のおまかせ";
+            public const string HeaderConfig = "設定";
+
             public ObservableCollection<MasterMenuItem> MenuItems { get; }
             public MasterViewModel()
             {
                 MenuItems = new ObservableCollection<MasterMenuItem>(new[]
                 {
-                    new MasterMenuItem { TargetType=typeof(Views.LibraryPage), Title = "一覧",Description="録画番組一覧" },
-                    new MasterMenuItem { TargetType=typeof(Views.LibraryDiscPage), Title = "ディスク一覧",Description="ディスク一覧" },
-                    new MasterMenuItem{TargetType=typeof(Views.GenresPage),Title="分類",Description="ジャンル検索"},
-                    new MasterMenuItem{Title="今日のおまかせ",Description="ランダムで番組選択",Action=(t)=>{
-                        var lib= Storages.LibraryStorage.GetLibraryOrLoad();
-
-                        if (lib?.Contents == null || lib.Contents.Length == 0)
-                            return;
-
-                        var pl=new VideoLibraryManagerCommon.Library.DiskVideoPairList();
-                        foreach(var disk in lib.Contents)
-                        {
-                            foreach(var video in disk.Contents)
-                            {
-                                pl.Add(new VideoLibraryManagerCommon.Library.DiskVideoPair(disk,video));
-                            }
-                        }
-                        Random rd=new Random((int)(DateTime.Now.Date.Ticks/TimeSpan.FromDays(1).Ticks));
-                        var todaysprog= pl.OrderBy(a=>a.Video.Length.TotalMilliseconds).ToArray()[ rd.Next(pl.Count)];
-
-                        var page = (Page)Activator.CreateInstance(typeof(Views.VideoDetailPage),todaysprog);
-                        page.Title = "今日のおまかせ";
-                        if (t.Detail is NavigationPage)
-                        {
-                            (t.Detail as NavigationPage).PushAsync(page);
-                        }
-                        else
-                        {
-                            t.Detail = new NavigationPage(page);
-                        }
+                    new MasterMenuItem { TargetType=typeof(Views.LibraryPage), Title = HeaderLibraryPage,Description="録画番組一覧" },
+                    new MasterMenuItem { TargetType=typeof(Views.LibraryDiscPage), Title = HeaderLibraryDiscPage,Description="ディスク一覧" },
+                    new MasterMenuItem{TargetType=typeof(Views.GenresPage),Title=HeaderGenresPage,Description="ジャンル検索"},
+                    new MasterMenuItem{Title=HeaderRandomMovie,Description="ランダムで番組選択",Action=async (t)=>{
+                        if(t is TopPage top)await top.ChooseRandomPage();
                     } },
-                    new MasterMenuItem {  Title = "設定",Description="サーバー設定"
+                    new MasterMenuItem {  Title = HeaderConfig,Description="サーバー設定"
                     ,Action= (t) =>
                     {
                         t.Detail=new NavigationPage( new SettingPage());
