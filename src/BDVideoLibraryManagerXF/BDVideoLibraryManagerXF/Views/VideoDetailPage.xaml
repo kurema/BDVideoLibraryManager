@@ -1,9 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:v="clr-namespace:BDVideoLibraryManagerXF.Views"
              x:Class="BDVideoLibraryManagerXF.Views.VideoDetailPage"
              Title="詳細"
              >
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Clicked="ToolbarItem_Clicked">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource FontFamily="MaterialSubset" Glyph="&#xe14d;"/>
+                <!-- クリップボードにコピー -->
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+    </ContentPage.ToolbarItems>
     <ScrollView>
         <StackLayout Spacing="20" Padding="15">
             <Label Text="{Binding Video.ProgramTitle}" Style="{DynamicResource ListItemTextStyle}" TextColor="{AppThemeBinding Light=Black,Dark=White,Default=Black}" FontSize="Large"/>
@@ -23,6 +32,7 @@
                     <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
                 </Label.GestureRecognizers>
             </Label>
+            <v:LinksView ItemsSource="{Binding Video.Links}" TextColor="{AppThemeBinding Light=Black,Dark=White,Default=Black}" Spacing="0,5,0,5" IsDialEnabled="True" />
         </StackLayout>
     </ScrollView>
 </ContentPage>

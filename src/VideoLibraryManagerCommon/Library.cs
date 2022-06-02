@@ -34,15 +34,17 @@ namespace VideoLibraryManagerCommon.Library
             }
         }
 
-        public string[] Genres { get
+        public string[] Genres
+        {
+            get
             {
                 if (_Genres != null) return _Genres;
                 var result = new List<string>();
-                foreach(var disk in this.Contents)
+                foreach (var disk in this.Contents)
                 {
-                    foreach(var video in disk.Contents)
+                    foreach (var video in disk.Contents)
                     {
-                        foreach(var genre in video.ProgramGenre.Split('　'))
+                        foreach (var genre in video.ProgramGenre.Split('　'))
                         {
                             if (!result.Contains(genre)) result.Add(genre);
                             var mainGenre = genre.Split(' ')[0];
@@ -58,7 +60,7 @@ namespace VideoLibraryManagerCommon.Library
         private string[] _Genres;
     }
 
-    public class DiskVideoPairList : IList<DiskVideoPair>,INotifyPropertyChanged,System.Collections.Specialized.INotifyCollectionChanged
+    public class DiskVideoPairList : IList<DiskVideoPair>, INotifyPropertyChanged, System.Collections.Specialized.INotifyCollectionChanged
     {
         private List<DiskVideoPair> Contents = new List<DiskVideoPair>();
 
@@ -173,7 +175,7 @@ namespace VideoLibraryManagerCommon.Library
     {
         public VideoBD Video { get; private set; }
         public DiskBD Disk { get; private set; }
-        public DiskVideoPair(DiskBD disk,VideoBD video)
+        public DiskVideoPair(DiskBD disk, VideoBD video)
         {
             this.Video = video;
             this.Disk = disk;
@@ -181,16 +183,18 @@ namespace VideoLibraryManagerCommon.Library
     }
 
 
-    public class DiskBD:IEnumerable<VideoBD>
+    public class DiskBD : IEnumerable<VideoBD>
     {
         public string DiskTitle { get; private set; }
         public string DiskName { get; private set; }
         public VideoBD[] Contents { get; private set; }
 
-        public TimeSpan TimeSpan { get
+        public TimeSpan TimeSpan
+        {
+            get
             {
                 var total = new TimeSpan(0);
-                foreach(var item in Contents)
+                foreach (var item in Contents)
                 {
                     total += item.Length;
                 }
@@ -205,14 +209,14 @@ namespace VideoLibraryManagerCommon.Library
             Contents = new VideoBD[0];
         }
 
-        public DiskBD(string title,string name,VideoBD[] contents)
+        public DiskBD(string title, string name, VideoBD[] contents)
         {
             DiskTitle = title;
             DiskName = name;
             Contents = contents;
         }
 
-        public DiskBD(TextReader tr,string DiskName)
+        public DiskBD(TextReader tr, string DiskName)
         {
             this.DiskName = DiskName;
 
@@ -223,7 +227,7 @@ namespace VideoLibraryManagerCommon.Library
             while (true)
             {
                 var line = parser.Read();
-                if (line==null) { Contents = result.ToArray(); return; }
+                if (line == null) { Contents = result.ToArray(); return; }
                 result.Enqueue(new VideoBD(line));
             }
         }
@@ -255,12 +259,15 @@ namespace VideoLibraryManagerCommon.Library
         private string _ProgramDetailNormalized;
         public string ProgramGenre { get; set; }
 
+        private LinkedText[] _Links = null;
+        public LinkedText[] Links => _Links ?? LinkedText.GetFromText(ProgramDetailNormalized);
+
         public static string NormalizeText(string s)
         {
-            s= s.ToLower().Replace('―', '-').Replace('ー', '-').Replace("・", "").Replace('　', ' ').Replace("：",":");
-            s= Regex.Replace(s, "[０-９]", p => ((char)(p.Value[0] - '０' + '0')).ToString());
-            s= Regex.Replace(s, "[ａ-ｚ]", p => ((char)(p.Value[0] - 'ａ' + 'a')).ToString());
-            s= Regex.Replace(s, "[Ａ-Ｚ]", p => ((char)(p.Value[0] - 'Ａ' + 'A')).ToString());
+            s = s.ToLower().Replace('―', '-').Replace('ー', '-').Replace("・", "").Replace('　', ' ').Replace("：", ":");
+            s = Regex.Replace(s, "[０-９]", p => ((char)(p.Value[0] - '０' + '0')).ToString());
+            s = Regex.Replace(s, "[ａ-ｚ]", p => ((char)(p.Value[0] - 'ａ' + 'a')).ToString());
+            s = Regex.Replace(s, "[Ａ-Ｚ]", p => ((char)(p.Value[0] - 'Ａ' + 'A')).ToString());
             return s;
         }
 
@@ -275,7 +282,8 @@ namespace VideoLibraryManagerCommon.Library
             ProgramGenre = "";
         }
 
-        public VideoBD(string[] CsvEntry) {
+        public VideoBD(string[] CsvEntry)
+        {
             var date = DateTime.Parse(CsvEntry[3]);
             var time = DateTime.Parse(CsvEntry[4]);
             this.RecordDateTime = date.Date + time.TimeOfDay;
@@ -287,6 +295,119 @@ namespace VideoLibraryManagerCommon.Library
             this.ProgramDetail = CsvEntry[13];
             this.ProgramGenre = CsvEntry[15];
         }
+    }
 
+    public class LinkedText
+    {
+        private const string PatternHttpCharsInside = @"\w!?/+\-_~;.,*&@#$%()'[\]";
+        public const string PatternHttpChars = "[" + PatternHttpCharsInside + "]";
+        public const string PatternHttpCharsNot = "[^" + PatternHttpCharsInside + "]";
+
+        private static Regex _RegexPhone = null;
+        public static Regex RegexPhone => _RegexPhone = _RegexPhone ?? new Regex(@"(0\d{1,4})[\-\(](\d{1,4})[\-\)](\d{3,4})", RegexOptions.Compiled);
+        //下だと末尾にマッチしなくて対策も面倒なので上にしました。
+        //public static Regex RegexPhone => _RegexPhone = _RegexPhone ?? new Regex(@"(?<=[^\d])(0\d{1,4})[\-\(](\d{1,4})[\-\)](\d{3,4})(?=[^\d])", RegexOptions.Compiled);
+
+        private static Regex _RegexHttp1 = null;
+        public static Regex RegexHttp1 => _RegexHttp1 = _RegexHttp1 ?? new Regex($@"https?://{PatternHttpChars}+", RegexOptions.Compiled);
+
+        private static Regex _RegexHttp2 = null;
+        public static Regex RegexHttp2 => _RegexHttp2 = _RegexHttp2 ?? new Regex($@"www\.{PatternHttpChars}+", RegexOptions.Compiled);
+
+        //private static Regex _RegexHttp3 = null;
+        //public static Regex RegexHttp3 => _RegexHttp3 = _RegexHttp3 ?? new Regex($@"{RegexHttpChars}+\.(?:jp|com|gov|net|co|org)(?:/{RegexHttpChars}+|)(?=[^\w!?/+\-_~;.,*&@#$%()'[\]])", RegexOptions.Compiled);
+
+        //バックトラックで処理速度が遅くなるのを避けるために二段階に分けました。
+        private static Regex _RegexHttp3 = null;
+        public static Regex RegexHttp3 => _RegexHttp3 = _RegexHttp3 ?? new Regex($@"\.(?:jp|com|gov|net|co|org)(?:/{PatternHttpChars}+|)(?={PatternHttpCharsNot})", RegexOptions.Compiled);
+
+
+        //private static Regex _RegexHttp3Pre = null;
+        //public static Regex RegexHttp3Pre => _RegexHttp3Pre = _RegexHttp3Pre ?? new Regex($@"\.(?:jp|com|gov|net|co|org)", RegexOptions.Compiled);
+
+        public LinkedText(string text, string textFull, LinkedTextType type)
+        {
+            Type = type;
+            Text = text ?? throw new ArgumentNullException(nameof(text));
+            TextFull = textFull ?? throw new ArgumentNullException(nameof(textFull));
+        }
+
+        public LinkedTextType Type { get; set; }
+
+        public string Text { get; set; }
+
+        public string TextFull { get; set; }
+
+        public static LinkedText[] GetFromText(string text)
+        {
+            var result = new List<(LinkedText, int)>();
+
+            //System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+            //System.Diagnostics.Debug.WriteLine("_____");
+            //sw.Start();
+            //sw.Stop();
+            //System.Diagnostics.Debug.WriteLine(sw.ElapsedMilliseconds);
+            //sw.Restart();
+            {
+                //var matches = Regex.Matches(text, @"(?:[^\d])(0\d{1,4})\-(\d{1,4})\-(\d{4})(?:[^\d])");
+                var matches = RegexPhone.Matches(text);
+                foreach (Match item in matches)
+                {
+                    if ((item.Groups[1].Value.Length + item.Groups[2].Value.Length) == 5 && item.Groups[3].Length == 4)
+                    {
+                        //固定電話
+                        //https://www.soumu.go.jp/main_sosiki/joho_tsusin/top/tel_number/q_and_a.html#q2
+                    }
+                    else if (Regex.IsMatch(item.Groups[1].Value, @"0[2-9]0") && item.Groups[2].Value.Length == 4 && item.Groups[3].Length == 4)
+                    {
+                        //携帯電話その他
+                        //010は国際電話に使うようだが、番組情報で出て来る可能性はないだろう。
+                    }
+                    else
+                    {
+                        //他に0120とか色々あるので結局素通し。
+                    }
+
+                    result.Add((new LinkedText(item.Value, item.Value, LinkedTextType.PhoneNumber), item.Index));
+                }
+            }
+            {
+                var matches = RegexHttp1.Matches(text);
+                foreach (Match item in matches)
+                {
+                    if (!item.Value.Contains('.')) continue;
+                    result.Add((new LinkedText(item.Value, item.Value, LinkedTextType.Http), item.Index));
+                }
+            }
+            {
+                var matches = RegexHttp2.Matches(text);
+                foreach (Match item in matches)
+                {
+                    if (!item.Value.Contains('.')) continue;
+                    if (result.Any(a => a.Item1.Text.Contains(item.Value))) continue;
+                    result.Add((new LinkedText(item.Value, $"https://{item.Value}", LinkedTextType.HttpAssumption), item.Index));
+                }
+            }
+            {
+                var matches = RegexHttp3.Matches(text);
+                foreach (Match item in matches)
+                {
+                    var matches2 = Regex.Matches(text,$@"{PatternHttpChars}+{Regex.Escape(item.Value)}");
+                    foreach (Match item2 in matches2)
+                    {
+                        if (result.Any(a => a.Item1.Text.Contains(item2.Value))) continue;
+                        result.Add((new LinkedText(item2.Value, $"https://{item2.Value}", LinkedTextType.HttpAssumption), item2.Index));
+                    }
+                }
+
+            }
+
+            return result.OrderBy(a => a.Item2).Select(a => a.Item1).ToArray();
+        }
+    }
+
+    public enum LinkedTextType
+    {
+        PhoneNumber, Http, HttpAssumption
     }
 }

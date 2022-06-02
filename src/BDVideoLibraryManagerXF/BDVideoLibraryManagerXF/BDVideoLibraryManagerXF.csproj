@@ -12,11 +12,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <None Remove="Fonts\search.ttf" />
+	  <None Remove="Fonts\subset.ttf" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <EmbeddedResource Include="Fonts\search.ttf" />
+	  <EmbeddedResource Include="Fonts\subset.ttf" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -31,6 +31,9 @@
 
 	<ItemGroup>
 	  <EmbeddedResource Update="Views\LibraryDiscPage.xaml">
+	    <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+	  </EmbeddedResource>
+	  <EmbeddedResource Update="Views\LinksView.xaml">
 	    <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
 	  </EmbeddedResource>
 	</ItemGroup>

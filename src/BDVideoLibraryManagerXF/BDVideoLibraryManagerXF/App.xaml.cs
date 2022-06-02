@@ -5,7 +5,7 @@ using Xamarin.Forms.Xaml;
 using Xamarin.Essentials;
 
 //https://dev.to/peedroca/material-font-icons-on-xamarin-forms-2a9h
-[assembly: ExportFont("search.ttf", Alias = "MaterialSearch")]
+[assembly: ExportFont("subset.ttf", Alias = "MaterialSubset")]
 //[assembly: ExportFont("MaterialIcons-Regular.ttf", Alias = "Material")]
 
 namespace BDVideoLibraryManagerXF
@@ -51,7 +51,6 @@ namespace BDVideoLibraryManagerXF
                         case AppActionHeader + "Random":
                             await top.ChooseRandomPage();
                             break;
-
                     }
                 }
                 catch
@@ -62,6 +61,7 @@ namespace BDVideoLibraryManagerXF
 
         protected override async void OnStart()
         {
+            if(Device.RuntimePlatform == Device.Android || Device.RuntimePlatform == Device.Android)
             {
                 try
                 {

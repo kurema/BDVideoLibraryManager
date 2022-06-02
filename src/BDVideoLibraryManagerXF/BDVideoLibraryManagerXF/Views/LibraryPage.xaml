@@ -17,7 +17,7 @@
     <ContentPage.ToolbarItems>
         <ToolbarItem x:Name="Search_button" Clicked="Search_Toggle">
             <ToolbarItem.IconImageSource>
-                <FontImageSource FontFamily="MaterialSearch" Glyph="&#xe8b6;"/>
+                <FontImageSource FontFamily="MaterialSubset" Glyph="&#xe8b6;"/>
             </ToolbarItem.IconImageSource>
         </ToolbarItem>
         <!-- &#xFE0E;は絵文字バリエーション・シーケンス。Unicode 6.1以降。Androidでは機能しない。残念。 -->

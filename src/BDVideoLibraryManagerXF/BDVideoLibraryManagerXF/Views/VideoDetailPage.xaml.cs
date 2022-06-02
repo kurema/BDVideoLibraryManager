@@ -40,5 +40,10 @@ namespace BDVideoLibraryManagerXF.Views
             if (label.FontSize == sizeSmall) label.FontSize = sizeMedium;
             else if (label.FontSize == sizeMedium) label.FontSize = sizeSmall;
         }
+
+        private void ToolbarItem_Clicked(object sender, EventArgs e)
+        {
+
+        }
     }
 }
