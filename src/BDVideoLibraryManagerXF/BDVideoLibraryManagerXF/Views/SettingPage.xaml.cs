@@ -40,9 +40,11 @@ namespace BDVideoLibraryManagerXF.Views
                 if (Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None
                     || (!Xamarin.Essentials.Connectivity.ConnectionProfiles.Any(a => a is Xamarin.Essentials.ConnectionProfile.WiFi or Xamarin.Essentials.ConnectionProfile.Ethernet)))
                 {
-                    await DisplayAlert(TitleResult, "ネットワークに接続されていません。", "OK");
-                    return;
+                    var alertResult= await DisplayAlert(TitleResult, "ネットワークに接続されていません。", "続行", "キャンセル");
+                    if (alertResult == false) return;
                 }
+
+                System.Text.RegularExpressions.Match match;
 
                 //SharpCifs.Smb.SmbFile folder;
                 //if (Storages.LibraryStorage.TestAccess(Label_Smb_Name.Text, Label_Smb_Path.Text, Label_Smb_User.Text, Label_Smb_Password.Text,out folder))
@@ -56,7 +58,8 @@ namespace BDVideoLibraryManagerXF.Views
                     if (button is not null) button.Text = "ダウンロード中";
                     //await Storages.LibraryStorage.CopyToLocal(Label_Smb_Name.Text, Label_Smb_Path.Text, Label_Smb_User.Text, Label_Smb_Password.Text);
                     var result = await Storages.LibraryStorage.TryCopy(smbName, smbPath, smbUser, smbPW, true);
-                    if (result) { Storages.LibraryStorage.LoadLocalData(); } else
+                    if (result) { Storages.LibraryStorage.LoadLocalData(); }
+                    else
                     {
                         if (button is not null) button.Text = "保存";
                         await DisplayAlert(TitleResult, "ダウンロードに失敗しました", "OK");
@@ -72,9 +75,9 @@ namespace BDVideoLibraryManagerXF.Views
                         mdp.Detail = new NavigationPage(new LibraryPage() { Title = "一覧" });
                     }
                 }
-                else if (smbPath.Contains("￥"))
+                else if ((match = System.Text.RegularExpressions.Regex.Match(smbPath,"([¥￥])")).Success)
                 {
-                    await DisplayAlert(TitleResult, "アクセスに失敗しました。\nパスに全角「￥」が含まれています。\nパスの区切りは\"/\"または\"\\\"です。", "OK");
+                    await DisplayAlert(TitleResult, $"アクセスに失敗しました。\nパスに「{match.Groups[1].Value}」が含まれています。\nパスの区切りは\"/\"または\"\\\"です。", "OK");
                 }
                 else
                 {

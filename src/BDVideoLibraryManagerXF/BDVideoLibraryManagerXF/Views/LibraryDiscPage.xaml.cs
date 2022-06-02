@@ -45,7 +45,15 @@ namespace BDVideoLibraryManagerXF.Views
         private async void ListView_Refreshing(object sender, EventArgs e)
         {
             if (ViewModel != null) ViewModel.IsBusy = true;
-            await LibraryPage.LoadRemote(async (a, b, c) => await DisplayAlert(a, b, c), ViewModel, () => TryLoadLocal());
+            await LibraryPage.LoadRemote(async (a, b, c, d) =>
+            {
+                if (d is null)
+                {
+                    await DisplayAlert(a, b, c);
+                    return false;
+                }
+                else return await DisplayAlert(a, b, c, d);
+            }, ViewModel, () => TryLoadLocal());
             if (ViewModel != null) ViewModel.IsBusy = false;
         }
 

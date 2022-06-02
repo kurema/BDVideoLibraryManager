@@ -67,18 +67,25 @@ namespace BDVideoLibraryManagerXF.Views
 
         public async Task LoadRemote()
         {
-            await LoadRemote(async (a, b, c) => await DisplayAlert(a, b, c), ViewModel, () => TryLoadLocal());
+            await LoadRemote(async (a, b, c, d) =>
+            {
+                if (d is null)
+                {
+                    await DisplayAlert(a, b, c);
+                    return false;
+                }
+                else return await DisplayAlert(a, b, c, d);
+            }, ViewModel, () => TryLoadLocal());
         }
 
-        public async static Task LoadRemote(Func<string, string, string, Task> alert, ViewModels.LibraryViewModel viewModel, Action loadLocal)
+        public async static Task LoadRemote(Func<string, string, string, string, Task<bool>> alert, ViewModels.LibraryViewModel viewModel, Action loadLocal)
         {
             if (Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None
                 || (!Xamarin.Essentials.Connectivity.ConnectionProfiles.Any(a => a is Xamarin.Essentials.ConnectionProfile.WiFi or Xamarin.Essentials.ConnectionProfile.Ethernet)))
             {
                 //SMBはチャレンジ/レスポンス方式なので、信頼できないWi-Fiに繋いでもパスワードが漏れることはない。
                 //とはいえ、Wi-Fiアクセスポイント名(MACアドレス)と紐付けた方が良い気がする。同一名のサーバーがあるかも知れないし。
-                await alert?.Invoke("情報取得", "ネットワークに接続されていません。", "OK");
-                return;
+                if (!await alert?.Invoke("情報取得", "ネットワークに接続されていません。", "続行", "キャンセル")) return;
             }
 
             if (viewModel != null) viewModel.IsBusy = true;
@@ -86,7 +93,7 @@ namespace BDVideoLibraryManagerXF.Views
             {
                 if (!await Storages.LibraryStorage.CopyToLocal())
                 {
-                    await alert?.Invoke("情報取得", "最新情報の取得に失敗しました。", "OK");
+                    await alert?.Invoke("情報取得", "最新情報の取得に失敗しました。", "OK", null);
                 }
                 loadLocal?.Invoke();
             }
@@ -193,12 +200,19 @@ namespace BDVideoLibraryManagerXF.Views
             {
                 await Navigation.PushAsync(new VideosDetailPage(list, result));
             }
-
-
         }
 
         //検索ボタンクリック時にSearchBarのフォーカスも外れるので強引に時間差で対応。
         public DateTime SearchBarLastClosedTime = new DateTime();
+
+        protected override void OnAppearing()
+        {
+            if (Storages.LibraryStorage.Library != null && !Storages.LibraryStorage.Library?.Contents.SequenceEqual(ViewModel?.FullLibrary.Contents) == true)
+            {
+                this.BindingContext = new ViewModels.LibraryViewModel() { FullLibrary = Storages.LibraryStorage.Library };
+            }
+            base.OnAppearing();
+        }
 
         private void SearchBar_OnUnfocused(object sender, FocusEventArgs e)
         {

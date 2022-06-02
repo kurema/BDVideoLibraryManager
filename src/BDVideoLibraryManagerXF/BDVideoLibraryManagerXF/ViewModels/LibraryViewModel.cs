@@ -20,7 +20,7 @@ namespace BDVideoLibraryManagerXF.ViewModels
 
         public Library Library { get { IsBusy = true;  var result= Search(FullLibrary, SearchWord,SearchGenre,TargetDisc);IsBusy = false;return result; } }
 
-        public string SearchWord { get { return _SearchWord; } set { _SearchWord = value;OnPropertyChanged(nameof(SearchWord)); if (value == null || value == "") OnPropertyChanged(nameof(Library)); } }
+        public string SearchWord { get { return _SearchWord; } set { _SearchWord = value;OnPropertyChanged(nameof(SearchWord)); if (value is null or "") OnPropertyChanged(nameof(Library)); } }
         private string _SearchWord;
 
         public string SearchGenre { get { return _SearchGenre; } set { _SearchGenre = value; OnPropertyChanged(nameof(SearchGenre)); OnPropertyChanged(nameof(Library)); } }
@@ -29,7 +29,7 @@ namespace BDVideoLibraryManagerXF.ViewModels
         public DiskBD TargetDisc { get { return _TargetDisc; }set { _TargetDisc = value; OnPropertyChanged(nameof(TargetDisc)); OnPropertyChanged(nameof(Library)); } }
         private DiskBD _TargetDisc;
 
-        public System.Windows.Input.ICommand SearchCommand { get { return _SearchCommand ?? (_SearchCommand = new DelegateCommand((o) => true, (o) => OnPropertyChanged(nameof(Library)))); } }
+        public System.Windows.Input.ICommand SearchCommand { get { return _SearchCommand ??= new DelegateCommand((o) => true, (o) => OnPropertyChanged(nameof(Library))); } }
         private System.Windows.Input.ICommand _SearchCommand;
 
         public bool IsBusy { get { return _IsBusy; }set { _IsBusy = value;OnPropertyChanged(nameof(IsBusy)); } }
