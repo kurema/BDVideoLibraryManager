@@ -13,6 +13,8 @@ namespace BDVideoLibraryManagerXF.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class VideosDetailPage : CarouselPage
     {
+        //CarouselPageはUI仮想化がサポートされてないから重すぎ。シャレにならん。
+
         public VideosDetailPage(VideoLibraryManagerCommon.Library.DiskVideoPairList list, VideoLibraryManagerCommon.Library.DiskVideoPair targetPair)
         {
             InitializeComponent();

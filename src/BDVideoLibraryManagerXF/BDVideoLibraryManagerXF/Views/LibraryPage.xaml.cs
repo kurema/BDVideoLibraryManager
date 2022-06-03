@@ -147,20 +147,21 @@ namespace BDVideoLibraryManagerXF.Views
 
         async void OnItemSelected(object sender, SelectedItemChangedEventArgs args)
         {
-            if (!(args.SelectedItem is VideoLibraryManagerCommon.Library.VideoBD))
-                return;
-            var item = args.SelectedItem as VideoLibraryManagerCommon.Library.VideoBD;
-
             // Manually deselect item
             LibraryListView.SelectedItem = null;
 
-            int maxVideoCount = 50;
+            if (args.SelectedItem is not VideoLibraryManagerCommon.Library.VideoBD item) return;
+            if (this.BindingContext is not ViewModels.LibraryViewModel bd) return;
+
+            const int maxVideoCount = 50;
 
             VideoLibraryManagerCommon.Library.DiskVideoPair result = null;
-            var list = new VideoLibraryManagerCommon.Library.DiskVideoPairList();
-            if (this.BindingContext is ViewModels.LibraryViewModel bd)
+            var contents = bd.Library.Contents;
+
             {
-                foreach (var disc in bd.Library.Contents)
+                var listFull = new VideoLibraryManagerCommon.Library.DiskVideoPairList();
+
+                foreach (var disc in contents)
                 {
                     foreach (var video in disc.Contents)
                     {
@@ -169,37 +170,61 @@ namespace BDVideoLibraryManagerXF.Views
                         {
                             result = temp;
                         }
-                        list.Add(temp);
+                        listFull.Add(temp);
+                        if (listFull.Count() > maxVideoCount) goto toomany;
                     }
                 }
+                await Navigation.PushAsync(new VideosDetailPage(listFull, result));
+                return;
+            }
+        toomany:
 
-                if (list.Count() > maxVideoCount)
+            {
+                var disc = contents.FirstOrDefault(a => a.Contains(item));
+
+                if (disc is not null)
                 {
-                    var disc = bd.Library.Contents.FirstOrDefault(a => a.Contains(item));
-                    if (disc is not null)
+                    int index = Array.IndexOf(contents, disc);
+                    if (index != -1)
                     {
-                        list.Clear();
-                        foreach (var video in disc)
+                        var list = new VideoLibraryManagerCommon.Library.DiskVideoPairList();
+                        for (int i = index; i < contents.Length; i++)
                         {
-                            var temp = new VideoLibraryManagerCommon.Library.DiskVideoPair(disc, video);
-                            if (video == item)
+                            foreach (var video in contents[i])
                             {
-                                result = temp;
+                                var temp = new VideoLibraryManagerCommon.Library.DiskVideoPair(disc, video);
+                                if (video == item)
+                                {
+                                    result = temp;
+                                }
+                                list.Add(temp);
+                                if (list.Count == maxVideoCount)
+                                {
+                                    if (list.Contains(result))
+                                    {
+                                        await Navigation.PushAsync(new VideosDetailPage(list, result));
+                                        return;
+                                    }
+                                    else
+                                    {
+                                        await Navigation.PushAsync(new VideoDetailPage(result));
+                                        return;
+                                    }
+                                }
                             }
-                            list.Add(temp);
                         }
+                        if (list.Count() <= maxVideoCount)
+                        {
+                            await Navigation.PushAsync(new VideosDetailPage(list, result));
+                            return;
+                        }
+
                     }
                 }
             }
 
-            if (list.Count() > maxVideoCount)
-            {
-                await Navigation.PushAsync(new VideoDetailPage(result));
-            }
-            else
-            {
-                await Navigation.PushAsync(new VideosDetailPage(list, result));
-            }
+            await Navigation.PushAsync(new VideoDetailPage(result));
+            return;
         }
 
         //検索ボタンクリック時にSearchBarのフォーカスも外れるので強引に時間差で対応。
