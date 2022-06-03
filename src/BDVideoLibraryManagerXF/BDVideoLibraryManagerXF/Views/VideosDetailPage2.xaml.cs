@@ -12,10 +12,8 @@ namespace BDVideoLibraryManagerXF.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class VideosDetailPage2 : ContentPage
     {
-        public VideosDetailPage2(IEnumerable<VideoLibraryManagerCommon.Library.DiskVideoPair> list, VideoLibraryManagerCommon.Library.DiskVideoPair targetPair)
+        public VideosDetailPage2(IEnumerable<VideoLibraryManagerCommon.Library.DiskVideoPair> list, VideoLibraryManagerCommon.Library.DiskVideoPair targetPair):this()
         {
-            InitializeComponent();
-
             mainCarousel.ItemsSource = list;
             if (list.Contains(targetPair))
             {
@@ -23,10 +21,8 @@ namespace BDVideoLibraryManagerXF.Views
             }
         }
 
-        public VideosDetailPage2(VideoLibraryManagerCommon.Library.DiskVideoPair targetPair)
+        public VideosDetailPage2(VideoLibraryManagerCommon.Library.DiskVideoPair targetPair):this()
         {
-            InitializeComponent();
-
             mainCarousel.ItemsSource = new[] { targetPair };
             mainCarousel.CurrentItem = targetPair;
         }
@@ -35,6 +31,12 @@ namespace BDVideoLibraryManagerXF.Views
         public VideosDetailPage2()
         {
             InitializeComponent();
+        }
+
+        protected override void OnAppearing()
+        {
+            //FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label));
+            base.OnAppearing();
         }
 
         public double FontSize
@@ -48,10 +50,16 @@ namespace BDVideoLibraryManagerXF.Views
 
         private void TapGestureRecognizer_Tapped(object sender, EventArgs e)
         {
+            var current = mainCarousel.CurrentItem;
             double sizeSmall = Device.GetNamedSize(NamedSize.Small, typeof(Label));
             double sizeMedium = Device.GetNamedSize(NamedSize.Medium, typeof(Label));
             if (FontSize == sizeSmall) FontSize = sizeMedium;
             else if (FontSize == sizeMedium) FontSize = sizeSmall;
+            //フォントサイズを変更するとCaroueselViewがおかしくなるというバグが普通に残ってるようだ。
+            //https://github.com/xamarin/Xamarin.Forms/issues/14083
+            //一度変更すれば起きなさそうなので、初回にフォントサイズ変更という強引なやり方で何とかする。
+            //他にFontSizeをOnAppearingで変更してUIアップデートを発生させる手もあるけど辞めた。
+            mainCarousel.ScrollTo(current,animate:false);
         }
 
         private async void Select_Disc(object sender, EventArgs e)
@@ -110,7 +118,7 @@ namespace BDVideoLibraryManagerXF.Views
             CopyAbort = false;
             for (int i = 3; i > 0; i--)
             {
-                notifyLabel.Text = $"コピーします ({i})。";
+                notifyLabel.Text = $"{i}秒後にコピーします。";
                 await Task.Delay(1000);
             }
             try
