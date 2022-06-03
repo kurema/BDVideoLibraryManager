@@ -69,9 +69,9 @@ namespace BDVideoLibraryManagerXF.Views
             if (pl.Count == 0) return;
 
             Random rd = new Random((int)(DateTime.Now.Date.Ticks / TimeSpan.FromDays(1).Ticks));
-            var todaysprog = pl.OrderBy(a => a.Video.Length.TotalMilliseconds).ToArray()[rd.Next(pl.Count)];
+            var listFull = pl.OrderBy(a => a.Video.Length.TotalMilliseconds).OrderBy(a => rd.NextDouble()).ToArray();
 
-            var page = (Page)Activator.CreateInstance(typeof(Views.VideoDetailPage), todaysprog);
+            var page = (Page)Activator.CreateInstance(typeof(Views.VideosDetailPage2), listFull, listFull[0]);
             page.Title = "今日のおまかせ";
             if (t.Detail is NavigationPage)
             {

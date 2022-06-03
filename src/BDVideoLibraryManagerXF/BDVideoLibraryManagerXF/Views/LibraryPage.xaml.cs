@@ -153,8 +153,6 @@ namespace BDVideoLibraryManagerXF.Views
             if (args.SelectedItem is not VideoLibraryManagerCommon.Library.VideoBD item) return;
             if (this.BindingContext is not ViewModels.LibraryViewModel bd) return;
 
-            const int maxVideoCount = 50;
-
             VideoLibraryManagerCommon.Library.DiskVideoPair result = null;
             var contents = bd.Library.Contents;
 
@@ -171,60 +169,59 @@ namespace BDVideoLibraryManagerXF.Views
                             result = temp;
                         }
                         listFull.Add(temp);
-                        if (listFull.Count() > maxVideoCount) goto toomany;
                     }
                 }
-                await Navigation.PushAsync(new VideosDetailPage(listFull, result));
+                await Navigation.PushAsync(new VideosDetailPage2(listFull, result));
                 return;
             }
-        toomany:
+        //toomany:
 
-            {
-                var disc = contents.FirstOrDefault(a => a.Contains(item));
+        //    {
+        //        var disc = contents.FirstOrDefault(a => a.Contains(item));
 
-                if (disc is not null)
-                {
-                    int index = Array.IndexOf(contents, disc);
-                    if (index != -1)
-                    {
-                        var list = new VideoLibraryManagerCommon.Library.DiskVideoPairList();
-                        for (int i = index; i < contents.Length; i++)
-                        {
-                            foreach (var video in contents[i])
-                            {
-                                var temp = new VideoLibraryManagerCommon.Library.DiskVideoPair(disc, video);
-                                if (video == item)
-                                {
-                                    result = temp;
-                                }
-                                list.Add(temp);
-                                if (list.Count == maxVideoCount)
-                                {
-                                    if (list.Contains(result))
-                                    {
-                                        await Navigation.PushAsync(new VideosDetailPage(list, result));
-                                        return;
-                                    }
-                                    else
-                                    {
-                                        await Navigation.PushAsync(new VideoDetailPage(result));
-                                        return;
-                                    }
-                                }
-                            }
-                        }
-                        if (list.Count() <= maxVideoCount)
-                        {
-                            await Navigation.PushAsync(new VideosDetailPage(list, result));
-                            return;
-                        }
+        //        if (disc is not null)
+        //        {
+        //            int index = Array.IndexOf(contents, disc);
+        //            if (index != -1)
+        //            {
+        //                var list = new VideoLibraryManagerCommon.Library.DiskVideoPairList();
+        //                for (int i = index; i < contents.Length; i++)
+        //                {
+        //                    foreach (var video in contents[i])
+        //                    {
+        //                        var temp = new VideoLibraryManagerCommon.Library.DiskVideoPair(disc, video);
+        //                        if (video == item)
+        //                        {
+        //                            result = temp;
+        //                        }
+        //                        list.Add(temp);
+        //                        if (list.Count == maxVideoCount)
+        //                        {
+        //                            if (list.Contains(result))
+        //                            {
+        //                                await Navigation.PushAsync(new VideosDetailPage(list, result));
+        //                                return;
+        //                            }
+        //                            else
+        //                            {
+        //                                await Navigation.PushAsync(new VideoDetailPage(result));
+        //                                return;
+        //                            }
+        //                        }
+        //                    }
+        //                }
+        //                if (list.Count() <= maxVideoCount)
+        //                {
+        //                    await Navigation.PushAsync(new VideosDetailPage(list, result));
+        //                    return;
+        //                }
 
-                    }
-                }
-            }
+        //            }
+        //        }
+        //    }
 
-            await Navigation.PushAsync(new VideoDetailPage(result));
-            return;
+        //    await Navigation.PushAsync(new VideoDetailPage(result));
+        //    return;
         }
 
         //検索ボタンクリック時にSearchBarのフォーカスも外れるので強引に時間差で対応。

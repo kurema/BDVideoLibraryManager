@@ -12,6 +12,16 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Views\VideoDetailPage.xaml.cs" />
+	  <Compile Remove="Views\VideosDetailPage.xaml.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Remove="Views\VideoDetailPage.xaml" />
+	  <EmbeddedResource Remove="Views\VideosDetailPage.xaml" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <None Remove="Fonts\subset.ttf" />
 	</ItemGroup>
 
@@ -37,6 +47,9 @@
 	    <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
 	  </EmbeddedResource>
 	  <EmbeddedResource Update="Views\VideoDetailSelectionPage.xaml">
+	    <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+	  </EmbeddedResource>
+	  <EmbeddedResource Update="Views\VideosDetailPage2.xaml">
 	    <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
 	  </EmbeddedResource>
 	</ItemGroup>

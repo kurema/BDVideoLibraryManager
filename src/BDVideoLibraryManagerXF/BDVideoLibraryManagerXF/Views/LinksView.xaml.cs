@@ -82,11 +82,9 @@ namespace BDVideoLibraryManagerXF.Views
 
         public void UpdateStacks()
         {
-            if (ItemsSource is null)
-            {
-                MainStack.Children.Clear();
-                return;
-            }
+            MainStack.Children.Clear();
+            if (ItemsSource is null) return;
+
             var fontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label));
             foreach (var item in ItemsSource)
             {
