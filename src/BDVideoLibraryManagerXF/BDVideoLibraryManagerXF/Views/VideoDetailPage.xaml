@@ -13,26 +13,50 @@
             </ToolbarItem.IconImageSource>
         </ToolbarItem>
     </ContentPage.ToolbarItems>
-    <ScrollView>
-        <StackLayout Spacing="20" Padding="15">
-            <Label Text="{Binding Video.ProgramTitle}" Style="{DynamicResource ListItemTextStyle}" TextColor="{AppThemeBinding Light=Black,Dark=White,Default=Black}" FontSize="Large"/>
-            <Label Text="{Binding Video.RecordDateTime, StringFormat='{0:yyyy年MM月dd日 HH:mm:ss}'}" TextColor="{AppThemeBinding Light=Black,Dark=White,Default=Black}" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Medium"/>
-            <Label Text="{Binding Video.Length, StringFormat=\{0:h\\:mm\\:ss\}}" TextColor="{AppThemeBinding Light=Black,Dark=White,Default=Black}" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Medium"/>
-            <Label Text="{Binding Video.ProgramGenre}" Style="{DynamicResource ListItemDetailTextStyle}" TextColor="{AppThemeBinding Light=Black,Dark=White,Default=Black}" FontSize="Medium"/>
-            <StackLayout Orientation="Horizontal" >
-                <Label Text="{Binding Video.ChannelNumber, StringFormat='Ch.{0}'}" TextColor="{AppThemeBinding Light=Black,Dark=White,Default=Black}" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Medium"/>
-                <Label Text="{Binding Video.ChannelName}" Style="{DynamicResource ListItemDetailTextStyle}" TextColor="{AppThemeBinding Light=Black,Dark=White,Default=Black}" FontSize="Medium"/>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <ScrollView Grid.RowSpan="2">
+            <StackLayout Spacing="20" Padding="15">
+                <Label Text="{Binding Video.ProgramTitle}" Style="{DynamicResource ListItemTextStyle}" TextColor="{AppThemeBinding Light=Black,Dark=White,Default=Black}" FontSize="Large"/>
+                <Label Text="{Binding Video.RecordDateTime, StringFormat='{0:yyyy年MM月dd日 HH:mm:ss}'}" TextColor="{AppThemeBinding Light=Black,Dark=White,Default=Black}" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Medium"/>
+                <Label Text="{Binding Video.Length, StringFormat=\{0:h\\:mm\\:ss\}}" TextColor="{AppThemeBinding Light=Black,Dark=White,Default=Black}" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Medium"/>
+                <Label Text="{Binding Video.ProgramGenre}" Style="{DynamicResource ListItemDetailTextStyle}" TextColor="{AppThemeBinding Light=Black,Dark=White,Default=Black}" FontSize="Medium"/>
+                <StackLayout Orientation="Horizontal" >
+                    <Label Text="{Binding Video.ChannelNumber, StringFormat='Ch.{0}'}" TextColor="{AppThemeBinding Light=Black,Dark=White,Default=Black}" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Medium"/>
+                    <Label Text="{Binding Video.ChannelName}" Style="{DynamicResource ListItemDetailTextStyle}" TextColor="{AppThemeBinding Light=Black,Dark=White,Default=Black}" FontSize="Medium"/>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal" >
+                    <Button Text="選択" Clicked="Select_Disc" />
+                    <Label Text="{Binding Disk.DiskName, StringFormat='ディスク番号:{0}'}" Style="{DynamicResource ListItemDetailTextStyle}" TextColor="{AppThemeBinding Light=Black,Dark=White,Default=Black}" FontSize="Medium" VerticalTextAlignment="Center"/>
+                </StackLayout>
+                <Label Text="{Binding Video.ProgramDetail}" Style="{DynamicResource ListItemDetailTextStyle}" TextColor="{AppThemeBinding Light=Black,Dark=White,Default=Black}" FontSize="Small"                   >
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
+                    </Label.GestureRecognizers>
+                </Label>
+                <v:LinksView ItemsSource="{Binding Video.Links}" TextColor="{AppThemeBinding Light=Black,Dark=White,Default=Black}" Spacing="0,5,0,5" IsDialEnabled="True" />
             </StackLayout>
-            <StackLayout Orientation="Horizontal" >
-                <Button Text="選択" Clicked="Select_Disc" />
-                <Label Text="{Binding Disk.DiskName, StringFormat='ディスク番号:{0}'}" Style="{DynamicResource ListItemDetailTextStyle}" TextColor="{AppThemeBinding Light=Black,Dark=White,Default=Black}" FontSize="Medium" VerticalTextAlignment="Center"/>
-            </StackLayout>
-            <Label Text="{Binding Video.ProgramDetail}" Style="{DynamicResource ListItemDetailTextStyle}" TextColor="{AppThemeBinding Light=Black,Dark=White,Default=Black}" FontSize="Small"                   >
-                <Label.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
-                </Label.GestureRecognizers>
-            </Label>
-            <v:LinksView ItemsSource="{Binding Video.Links}" TextColor="{AppThemeBinding Light=Black,Dark=White,Default=Black}" Spacing="0,5,0,5" IsDialEnabled="True" />
-        </StackLayout>
-    </ScrollView>
+        </ScrollView>
+        <Grid IsVisible="false" x:Name="notifyGrid" Grid.Row="1" Background="{AppThemeBinding Light=Black,Dark=White,Default=Black}" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Label Text="Word" x:Name="notifyLabel" TextColor="{AppThemeBinding Light=White,Dark=Black,Default=White}" VerticalOptions="Center" Margin="5,10" />
+            <ImageButton Grid.Column="1" BackgroundColor="Transparent" Margin="5" Clicked="ImageButton_Clicked_Share">
+                <ImageButton.Source>
+                    <FontImageSource FontFamily="MaterialSubset" Glyph="&#xe80d;" Color="{AppThemeBinding Light=White,Dark=Black,Default=White}"/>
+                </ImageButton.Source>
+            </ImageButton>
+            <ImageButton Grid.Column="2" BackgroundColor="Transparent" Margin="5" Clicked="ImageButton_Clicked_Search">
+                <ImageButton.Source>
+                    <FontImageSource FontFamily="MaterialSubset" Glyph="&#xe8b6;" Color="{AppThemeBinding Light=White,Dark=Black,Default=White}"/>
+                </ImageButton.Source>
+            </ImageButton>
+        </Grid>
+    </Grid>
 </ContentPage>

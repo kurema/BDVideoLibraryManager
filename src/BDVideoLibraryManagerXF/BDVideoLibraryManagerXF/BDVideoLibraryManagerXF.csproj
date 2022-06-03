@@ -36,5 +36,8 @@
 	  <EmbeddedResource Update="Views\LinksView.xaml">
 	    <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
 	  </EmbeddedResource>
+	  <EmbeddedResource Update="Views\VideoDetailSelectionPage.xaml">
+	    <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+	  </EmbeddedResource>
 	</ItemGroup>
 </Project>
