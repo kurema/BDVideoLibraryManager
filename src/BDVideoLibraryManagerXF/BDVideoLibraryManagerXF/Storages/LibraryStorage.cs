@@ -11,7 +11,17 @@ namespace BDVideoLibraryManagerXF.Storages;
 
 public static class LibraryStorage
 {
-    public static Library Library { get; private set; }
+    public static event EventHandler LibraryChangedEventHandler;
+
+    private static Library _Library;
+    public static Library Library
+    {
+        get => _Library; private set
+        {
+            _Library = value;
+            LibraryChangedEventHandler?.Invoke(Library, new EventArgs());
+        }
+    }
     private static System.Threading.SemaphoreSlim Semaphore = new(1, 1);
 
     public static string PathCsv => System.IO.Path.Combine(Xamarin.Essentials.FileSystem.AppDataDirectory, "csv");
@@ -55,7 +65,7 @@ public static class LibraryStorage
 
         string remotePathTop, remotePathBottom;
         {
-            remotePath = System.Text.RegularExpressions.Regex.Replace(remotePath, @"^[\\/]+", "").Replace('\\','/');
+            remotePath = System.Text.RegularExpressions.Regex.Replace(remotePath, @"^[\\/]+", "").Replace('\\', '/');
             var match = System.Text.RegularExpressions.Regex.Match(remotePath, "^([^/]+)/(.+)$");
             if (match.Success)
             {

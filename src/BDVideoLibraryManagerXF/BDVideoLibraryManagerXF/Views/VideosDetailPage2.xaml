@@ -3,9 +3,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="BDVideoLibraryManagerXF.Views.VideosDetailPage2"
              xmlns:v="clr-namespace:BDVideoLibraryManagerXF.Views"
+             xmlns:vc="clr-namespace:BDVideoLibraryManagerXF.ValueConverters"
              Title="詳細"
              x:Name="top"
              >
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <vc:IsNotNullOrEmptyValueConverter x:Key="IsNotNullOrEmptyValueConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <ContentPage.ToolbarItems>
         <ToolbarItem Clicked="ToolbarItem_Clicked_Clipboard">
             <ToolbarItem.IconImageSource>
@@ -28,7 +34,9 @@
                                 <Label Text="{Binding Video.ProgramTitle}" Style="{DynamicResource ListItemTextStyle}" TextColor="{AppThemeBinding Light=Black,Dark=White,Default=Black}" FontSize="Large"/>
                                 <Label Text="{Binding Video.RecordDateTime, StringFormat='{0:yyyy年MM月dd日 HH:mm:ss}'}" TextColor="{AppThemeBinding Light=Black,Dark=White,Default=Black}" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Medium"/>
                                 <Label Text="{Binding Video.Length, StringFormat=\{0:h\\:mm\\:ss\}}" TextColor="{AppThemeBinding Light=Black,Dark=White,Default=Black}" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Medium"/>
-                                <Label Text="{Binding Video.ProgramGenre}" Style="{DynamicResource ListItemDetailTextStyle}" TextColor="{AppThemeBinding Light=Black,Dark=White,Default=Black}" FontSize="Medium"/>
+                                <Label Text="{Binding Video.ProgramGenre}" Style="{DynamicResource ListItemDetailTextStyle}" TextColor="{AppThemeBinding Light=Black,Dark=White,Default=Black}" FontSize="Medium"
+                                       IsVisible="{Binding Video.ProgramGenre, Converter={StaticResource IsNotNullOrEmptyValueConverter}}"
+                                       />
                                 <StackLayout Orientation="Horizontal" >
                                     <Label Text="{Binding Video.ChannelNumber, StringFormat='Ch.{0}'}" TextColor="{AppThemeBinding Light=Black,Dark=White,Default=Black}" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="Medium"/>
                                     <Label Text="{Binding Video.ChannelName}" Style="{DynamicResource ListItemDetailTextStyle}" TextColor="{AppThemeBinding Light=Black,Dark=White,Default=Black}" FontSize="Medium"/>

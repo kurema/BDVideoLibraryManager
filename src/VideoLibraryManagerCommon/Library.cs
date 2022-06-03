@@ -44,6 +44,7 @@ namespace VideoLibraryManagerCommon.Library
                 {
                     foreach (var video in disk.Contents)
                     {
+                        if (string.IsNullOrWhiteSpace(video.ProgramGenre)) continue;
                         foreach (var genre in video.ProgramGenre.Split('　'))
                         {
                             if (!result.Contains(genre)) result.Add(genre);

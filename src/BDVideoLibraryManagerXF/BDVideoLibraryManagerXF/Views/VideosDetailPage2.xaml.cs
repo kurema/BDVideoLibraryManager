@@ -83,7 +83,7 @@ namespace BDVideoLibraryManagerXF.Views
                 temp = System.Text.RegularExpressions.Regex.Replace(temp, @"\s+$", "");
                 addText(temp);
             }
-            addText(dvp.Video.ProgramGenre);
+            //addText(dvp.Video.ProgramGenre);
             addText(dvp.Video.ChannelName);
             addText(dvp.Disk.DiskTitle);
             addText(dvp.Disk.DiskName);
