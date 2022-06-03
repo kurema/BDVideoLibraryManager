@@ -33,12 +33,6 @@ namespace BDVideoLibraryManagerXF.Views
             InitializeComponent();
         }
 
-        protected override void OnAppearing()
-        {
-            //FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label));
-            base.OnAppearing();
-        }
-
         public double FontSize
         {
             get { return (double)GetValue(FontSizeProperty); }
@@ -57,7 +51,6 @@ namespace BDVideoLibraryManagerXF.Views
             else if (FontSize == sizeMedium) FontSize = sizeSmall;
             //フォントサイズを変更するとCaroueselViewがおかしくなるというバグが普通に残ってるようだ。
             //https://github.com/xamarin/Xamarin.Forms/issues/14083
-            //一度変更すれば起きなさそうなので、初回にフォントサイズ変更という強引なやり方で何とかする。
             //他にFontSizeをOnAppearingで変更してUIアップデートを発生させる手もあるけど辞めた。
             mainCarousel.ScrollTo(current,animate:false);
         }
@@ -111,9 +104,6 @@ namespace BDVideoLibraryManagerXF.Views
             if (result.text is null) return;
 
             notifyGrid.IsVisible = true;
-            //ここでコピーせずダイアログ消えた後にコピーした方が良い(共有や検索した場合キャンセル)？
-            //なら「コピーします」？
-            //どうせこのタイミングでコピーしてるかは関係ない気がする。
             CopiedText = result.text;
             CopyAbort = false;
             for (int i = 3; i > 0; i--)
@@ -126,9 +116,9 @@ namespace BDVideoLibraryManagerXF.Views
                 if (CopyAbort == false)
                 {
                     await Xamarin.Essentials.Clipboard.SetTextAsync(result.text);
+                    //この表示は実際には見えない。
                     notifyLabel.Text = "コピーしました。";
                 }
-                //この表示は実際には見えない。
             }
             catch
             {
