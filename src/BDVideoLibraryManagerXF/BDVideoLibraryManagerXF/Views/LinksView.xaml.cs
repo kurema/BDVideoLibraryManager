@@ -120,6 +120,7 @@ namespace BDVideoLibraryManagerXF.Views
                         break;
                     case VideoLibraryManagerCommon.Library.LinkedTextType.Http:
                     case VideoLibraryManagerCommon.Library.LinkedTextType.HttpAssumption:
+                    case VideoLibraryManagerCommon.Library.LinkedTextType.Search:
                         {
                             tapr.Tapped += async (_, _) =>
                             {

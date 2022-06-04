@@ -261,7 +261,7 @@ namespace VideoLibraryManagerCommon.Library
         public string ProgramGenre { get; set; }
 
         private LinkedText[] _Links = null;
-        public LinkedText[] Links => _Links ?? LinkedText.GetFromText(ProgramDetailNormalized);
+        public LinkedText[] Links => _Links ?? LinkedText.GetFromText(ProgramDetail, ProgramDetailNormalized);
 
         public static string NormalizeText(string s)
         {
@@ -322,6 +322,11 @@ namespace VideoLibraryManagerCommon.Library
         private static Regex _RegexHttp3 = null;
         public static Regex RegexHttp3 => _RegexHttp3 = _RegexHttp3 ?? new Regex($@"\.(?:jp|com|gov|net|co|org)(?:/{PatternHttpChars}+|)(?={PatternHttpCharsNot})", RegexOptions.Compiled);
 
+        private static Regex _RegexSearch = null;
+        public static Regex RegexSearch => _RegexSearch = _RegexSearch ?? new Regex(@"[「『""]([^」]+)[」』""][でを\s]?検索", RegexOptions.Compiled);
+
+        public const string SearchUrl = "https://www.google.com/search?q={0}";
+
 
         //private static Regex _RegexHttp3Pre = null;
         //public static Regex RegexHttp3Pre => _RegexHttp3Pre = _RegexHttp3Pre ?? new Regex($@"\.(?:jp|com|gov|net|co|org)", RegexOptions.Compiled);
@@ -339,7 +344,7 @@ namespace VideoLibraryManagerCommon.Library
 
         public string TextFull { get; set; }
 
-        public static LinkedText[] GetFromText(string text)
+        public static LinkedText[] GetFromText(string text, string noramalizedText)
         {
             var result = new List<(LinkedText, int)>();
 
@@ -351,7 +356,7 @@ namespace VideoLibraryManagerCommon.Library
             //sw.Restart();
             {
                 //var matches = Regex.Matches(text, @"(?:[^\d])(0\d{1,4})\-(\d{1,4})\-(\d{4})(?:[^\d])");
-                var matches = RegexPhone.Matches(text);
+                var matches = RegexPhone.Matches(noramalizedText);
                 foreach (Match item in matches)
                 {
                     if ((item.Groups[1].Value.Length + item.Groups[2].Value.Length) == 5 && item.Groups[3].Length == 4)
@@ -373,7 +378,7 @@ namespace VideoLibraryManagerCommon.Library
                 }
             }
             {
-                var matches = RegexHttp1.Matches(text);
+                var matches = RegexHttp1.Matches(noramalizedText);
                 foreach (Match item in matches)
                 {
                     if (!item.Value.Contains('.')) continue;
@@ -381,7 +386,7 @@ namespace VideoLibraryManagerCommon.Library
                 }
             }
             {
-                var matches = RegexHttp2.Matches(text);
+                var matches = RegexHttp2.Matches(noramalizedText);
                 foreach (Match item in matches)
                 {
                     if (!item.Value.Contains('.')) continue;
@@ -390,17 +395,25 @@ namespace VideoLibraryManagerCommon.Library
                 }
             }
             {
-                var matches = RegexHttp3.Matches(text);
+                var matches = RegexHttp3.Matches(noramalizedText);
                 foreach (Match item in matches)
                 {
-                    var matches2 = Regex.Matches(text,$@"{PatternHttpChars}+{Regex.Escape(item.Value)}");
+                    var matches2 = Regex.Matches(noramalizedText, $@"{PatternHttpChars}+{Regex.Escape(item.Value)}");
                     foreach (Match item2 in matches2)
                     {
                         if (result.Any(a => a.Item1.Text.Contains(item2.Value))) continue;
                         result.Add((new LinkedText(item2.Value, $"https://{item2.Value}", LinkedTextType.HttpAssumption), item2.Index));
                     }
                 }
-
+            }
+            {
+                var matches = RegexSearch.Matches(text);
+                foreach (Match item in matches)
+                {
+                    var uri = string.Format(SearchUrl, System.Web.HttpUtility.UrlEncode(item.Groups[1].Value));
+                    if (result.Any(a => a.Item1.Text.Contains(item.Value))) continue;
+                    result.Add((new LinkedText(item.Value, uri, LinkedTextType.Search), item.Index));
+                }
             }
 
             return result.OrderBy(a => a.Item2).Select(a => a.Item1).ToArray();
@@ -409,6 +422,6 @@ namespace VideoLibraryManagerCommon.Library
 
     public enum LinkedTextType
     {
-        PhoneNumber, Http, HttpAssumption
+        PhoneNumber, Http, HttpAssumption, Search
     }
 }

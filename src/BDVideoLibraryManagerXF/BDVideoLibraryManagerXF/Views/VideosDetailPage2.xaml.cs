@@ -12,7 +12,7 @@ namespace BDVideoLibraryManagerXF.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class VideosDetailPage2 : ContentPage
     {
-        public VideosDetailPage2(IEnumerable<VideoLibraryManagerCommon.Library.DiskVideoPair> list, VideoLibraryManagerCommon.Library.DiskVideoPair targetPair):this()
+        public VideosDetailPage2(IEnumerable<VideoLibraryManagerCommon.Library.DiskVideoPair> list, VideoLibraryManagerCommon.Library.DiskVideoPair targetPair) : this()
         {
             mainCarousel.ItemsSource = list;
             if (list.Contains(targetPair))
@@ -21,7 +21,7 @@ namespace BDVideoLibraryManagerXF.Views
             }
         }
 
-        public VideosDetailPage2(VideoLibraryManagerCommon.Library.DiskVideoPair targetPair):this()
+        public VideosDetailPage2(VideoLibraryManagerCommon.Library.DiskVideoPair targetPair) : this()
         {
             mainCarousel.ItemsSource = new[] { targetPair };
             mainCarousel.CurrentItem = targetPair;
@@ -52,7 +52,7 @@ namespace BDVideoLibraryManagerXF.Views
             //フォントサイズを変更するとCaroueselViewがおかしくなるというバグが普通に残ってるようだ。
             //https://github.com/xamarin/Xamarin.Forms/issues/14083
             //他にFontSizeをOnAppearingで変更してUIアップデートを発生させる手もあるけど辞めた。
-            mainCarousel.ScrollTo(current,animate:false);
+            mainCarousel.ScrollTo(current, animate: false);
         }
 
         private async void Select_Disc(object sender, EventArgs e)
@@ -79,14 +79,28 @@ namespace BDVideoLibraryManagerXF.Views
             {
                 var temp = dvp.Video?.ProgramTitle;
                 temp = System.Text.RegularExpressions.Regex.Replace(temp, @"\[[^\]]+\]", "");
-                temp = System.Text.RegularExpressions.Regex.Replace(temp, @"^\s+", "");
-                temp = System.Text.RegularExpressions.Regex.Replace(temp, @"\s+$", "");
+                temp = System.Text.RegularExpressions.Regex.Replace(temp, @"【[^】]+】", "");
+                temp = System.Text.RegularExpressions.Regex.Replace(temp, @"^[\s　]+", "");
+                temp = System.Text.RegularExpressions.Regex.Replace(temp, @"[\s　]+$", "");
                 addText(temp);
+
+                var matches = System.Text.RegularExpressions.Regex.Matches(temp, @"[「『""]([^」』""]+)[」』""]");
+                foreach (System.Text.RegularExpressions.Match match in matches)
+                {
+                    addText(match.Groups[1].Value);
+                }
+
+                var temps = temp.Split('◆', '◇');
+                if (temps.Length > 1)
+                {
+                    temps[0] = System.Text.RegularExpressions.Regex.Replace(temps[0], @"[\s　]+$", "");
+                    addText(temps[0]);
+                }
             }
             //addText(dvp.Video.ProgramGenre);
             addText(dvp.Video.ChannelName);
-            addText(dvp.Disk.DiskTitle);
             addText(dvp.Disk.DiskName);
+            addText(dvp.Disk.DiskTitle);
             foreach (var item in dvp.Video.Links) addText(item.TextFull);
             addText(dvp.Video.ProgramDetail, "[動画情報] 全文");
             const string detailSelect = "[動画情報] 選択";
