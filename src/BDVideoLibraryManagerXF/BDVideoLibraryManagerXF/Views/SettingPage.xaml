@@ -7,6 +7,9 @@
         <StackLayout Padding="10">
             <Label Text="サーバー名" TextColor="{AppThemeBinding Light=Black,Dark=White,Default=Black}"/>
             <Entry x:Name="Label_Smb_Name" />
+            <ScrollView>
+                <StackLayout x:Name="stackServerSuggestion" Orientation="Horizontal"/>
+            </ScrollView>
             <Label Text="ユーザー名" TextColor="{AppThemeBinding Light=Black,Dark=White,Default=Black}"/>
             <Entry x:Name="Label_Smb_User" />
             <Label Text="パスワード" TextColor="{AppThemeBinding Light=Black,Dark=White,Default=Black}"/>

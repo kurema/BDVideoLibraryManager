@@ -19,10 +19,37 @@ namespace BDVideoLibraryManagerXF.Views
         {
             InitializeComponent();
 
-            Label_Smb_User.Text = Storages.SettingStorage.SMBID;
-            Task.Run(async () => Label_Smb_Password.Text = await Storages.SettingStorage.GetSMBPassword());
-            Label_Smb_Path.Text = Storages.SettingStorage.SMBPath;
-            Label_Smb_Name.Text = Storages.SettingStorage.SMBServerName;
+            {
+                Label_Smb_User.Text = Storages.SettingStorage.SMBID;
+                Task.Run(async () => Label_Smb_Password.Text = await Storages.SettingStorage.GetSMBPassword());
+                Label_Smb_Path.Text = Storages.SettingStorage.SMBPath;
+                Label_Smb_Name.Text = Storages.SettingStorage.SMBServerName;
+            }
+
+            Xamarin.Essentials.MainThread.InvokeOnMainThreadAsync(async () =>
+            {
+                try
+                {
+                    stackServerSuggestion.Children.Clear();
+                    var host = await System.Net.Dns.GetHostEntryAsync(System.Net.Dns.GetHostName());
+                    foreach (var ip in host.AddressList)
+                    {
+                        if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                        {
+                            var suggest = ip.ToString();
+                            suggest = System.Text.RegularExpressions.Regex.Replace(suggest, @"\.\d+$", ".");
+
+                            var button = new Button() { Text = suggest, VerticalOptions = LayoutOptions.Start };
+                            button.Clicked += (s, e) =>
+                            {
+                                Label_Smb_Name.Text = suggest;
+                            };
+                            stackServerSuggestion.Children.Add(button);
+                        }
+                    }
+                }
+                catch { }
+            });
         }
 
         private async void Button_Clicked(object sender, EventArgs e)
