@@ -26,6 +26,8 @@ namespace BDVideoLibraryManagerXF.Views
                 Label_Smb_Name.Text = Storages.SettingStorage.SMBServerName;
             }
 
+            //savePath.Text = Storages.LibraryStorage.PathCsvClosed;
+
             Xamarin.Essentials.MainThread.InvokeOnMainThreadAsync(async () =>
             {
                 try
@@ -133,5 +135,55 @@ namespace BDVideoLibraryManagerXF.Views
                 Navigation.PushAsync(new TutorialPage() { Title = "チュートリアル" });
             }
         }
+
+        //private async void ImageButton_Clicked_CopyPath(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        System.IO.Directory.CreateDirectory(Storages.LibraryStorage.PathCsv);
+        //        await Xamarin.Essentials.Clipboard.SetTextAsync(Storages.LibraryStorage.PathCsvClosed);
+        //    }
+        //    catch
+        //    {
+        //        //厳密にはフォルダ作成に失敗かも知れない。
+        //        labelPathMessage.Text = "コピー出来ませんでした。";
+        //        return;
+        //    }
+        //    labelPathMessage.Text = "コピーしました。";
+        //}
+
+        //private async void ImageButton_Clicked_Share(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        System.IO.Directory.CreateDirectory(Storages.LibraryStorage.PathCsv);
+        //        await Xamarin.Essentials.Share.RequestAsync(Storages.LibraryStorage.PathCsvClosed, "保存先");
+        //    }
+        //    catch
+        //    {
+        //        labelPathMessage.Text = "共有に失敗しました。";
+        //        return;
+        //    }
+        //    labelPathMessage.Text = "";
+        //}
+
+        //private async void ImageButton_Clicked_Open(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        System.IO.Directory.CreateDirectory(Storages.LibraryStorage.PathCsv);
+        //        await Xamarin.Essentials.Launcher.OpenAsync(new Xamarin.Essentials.OpenFileRequest()
+        //        {
+        //            File = new Xamarin.Essentials.ReadOnlyFile(Storages.LibraryStorage.PathCsv)
+        //        });
+
+        //        labelPathMessage.Text = "";
+        //        return;
+        //    }
+        //    catch
+        //    {
+        //    }
+        //    labelPathMessage.Text = "開けませんでした。";
+        //}
     }
 }

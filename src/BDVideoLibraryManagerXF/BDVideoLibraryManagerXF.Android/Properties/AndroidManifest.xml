@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="7" package="com.github.kurema.BDVideoLibraryManager" android:installLocation="auto" android:versionName="2.0.1.0">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="8" package="com.github.kurema.BDVideoLibraryManager" android:installLocation="auto" android:versionName="2.0.2.0">
 	<uses-sdk android:minSdkVersion="21" android:targetSdkVersion="31" />
 	<application android:label="BD録画管理" android:theme="@style/MainTheme" android:icon="@mipmap/icon"></application>
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />

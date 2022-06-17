@@ -25,7 +25,33 @@ public static class LibraryStorage
     private static System.Threading.SemaphoreSlim Semaphore = new(1, 1);
 
     public static string PathCsv => System.IO.Path.Combine(Xamarin.Essentials.FileSystem.AppDataDirectory, "csv");
+    public static string PathCsvClosed
+    {
+        get
+        {
+            var path = PathCsv;
+            if (path.EndsWith(new string(System.IO.Path.DirectorySeparatorChar, 1)) || path.EndsWith(new String(System.IO.Path.AltDirectorySeparatorChar, 1)))
+            {
+                return path;
+            }
+            else
+            {
+                return path + System.IO.Path.DirectorySeparatorChar;
+            }
+        }
+    }
     public static string PathCsvTemp => System.IO.Path.Combine(Xamarin.Essentials.FileSystem.AppDataDirectory, "csv.temp");
+
+    public static bool CsvExist
+    {
+        get
+        {
+            if (!System.IO.Directory.Exists(PathCsv)) return false;
+            var files = System.IO.Directory.GetFiles(PathCsv);
+            if (files.Any(a => System.IO.File.Exists(a) && System.IO.Path.GetExtension(a).ToUpperInvariant() == ".CSV")) return true;
+            return false;
+        }
+    }
 
     public static Library GetLibraryOrLoad()
     {
@@ -282,7 +308,7 @@ public static class LibraryStorage
 
     public static async Task<bool> CopyToLocal()
     {
-        //return await CopyToLocal(SettingStorage.SMBServerName, SettingStorage.SMBPath, SettingStorage.SMBID, SettingStorage.SMBPassword);
+        if (!SettingStorage.IsSet) return false;
         var result = await TryCopy(SettingStorage.SMBServerName, SettingStorage.SMBPath, SettingStorage.SMBID, await SettingStorage.GetSMBPassword(), true);
         if (result) LoadLocalData();
         return result;

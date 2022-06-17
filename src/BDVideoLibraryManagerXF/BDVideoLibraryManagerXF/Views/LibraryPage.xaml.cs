@@ -80,6 +80,11 @@ namespace BDVideoLibraryManagerXF.Views
 
         public async static Task LoadRemote(Func<string, string, string, string, Task<bool>> alert, ViewModels.LibraryViewModel viewModel, Action loadLocal)
         {
+            if (!Storages.SettingStorage.IsSet)
+            {
+                await alert?.Invoke("情報取得", "サーバーが設定されていません。", "OK", null);
+            }
+
             if (Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None
                 || (!Xamarin.Essentials.Connectivity.ConnectionProfiles.Any(a => a is Xamarin.Essentials.ConnectionProfile.WiFi or Xamarin.Essentials.ConnectionProfile.Ethernet)))
             {

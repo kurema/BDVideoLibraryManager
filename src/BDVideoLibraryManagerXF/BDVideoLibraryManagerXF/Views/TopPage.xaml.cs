@@ -16,7 +16,7 @@ namespace BDVideoLibraryManagerXF.Views
         {
             InitializeComponent();
 
-            if (SettingStorage.IsSet)
+            if (SettingStorage.IsSet || LibraryStorage.CsvExist)
                 //Navigation.PushAsync(new TutorialPage() { Title = "チュートリアル" });
                 Navigation.PushAsync(new LibraryPage() { Title = "一覧" });
             else
