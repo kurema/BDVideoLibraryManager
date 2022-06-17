@@ -166,7 +166,7 @@ namespace BDVideoLibraryManagerXF.Views
                                 try
                                 {
                                     //厳密には色々考えてUTC変換しないといけないが、Xamarinでタイムゾーン系のクラス触るのは危ういので単純減算。
-                                    await Xamarin.Essentials.Browser.OpenAsync($"https://web.archive.org/web/{TargetDate.AddHours(-9).ToString("yyyyMMddHHmmss")}/{address}");
+                                    await Xamarin.Essentials.Browser.OpenAsync($"https://web.archive.org/web/{TargetDate.AddHours(-9):yyyyMMddHHmmss}/{address}");
                                 }
                                 catch { }
                             };
