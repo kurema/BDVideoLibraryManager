@@ -44,8 +44,48 @@ namespace BDVideoLibraryManagerXF.Views
         }
 
         public static readonly BindableProperty TextColorProperty =
-            BindableProperty.Create(nameof(TextColor), typeof(Color?), typeof(LinksView), null, propertyChanged: (b, _, _) =>
+            BindableProperty.Create(nameof(TextColor), typeof(Color?), typeof(LinksView), null, propertyChanged: (b, o, n) =>
             {
+                if (o == n) return;
+                (b as LinksView)?.UpdateLabelDesign();
+            });
+
+        public bool EnableWebArchive
+        {
+            get { return (bool)GetValue(EnableWebArchiveProperty); }
+            set { SetValue(EnableWebArchiveProperty, value); }
+        }
+
+        public static readonly BindableProperty EnableWebArchiveProperty =
+            BindableProperty.Create(nameof(EnableWebArchive), typeof(bool), typeof(LinksView),false, propertyChanged: (b, o, n) =>
+            {
+                if (o == n) return;
+                (b as LinksView)?.UpdateLabelDesign();
+            });
+
+        public string WebArchiveTitle
+        {
+            get { return (string)GetValue(WebArchiveTitleProperty); }
+            set { SetValue(WebArchiveTitleProperty, value); }
+        }
+
+        public static readonly BindableProperty WebArchiveTitleProperty =
+            BindableProperty.Create(nameof(WebArchiveTitle), typeof(string), typeof(LinksView), "archive.org", propertyChanged: (b, o, n) =>
+            {
+                if (o == n) return;
+                (b as LinksView)?.UpdateLabelDesign();
+            });
+
+        public DateTime TargetDate
+        {
+            get { return (DateTime)GetValue(TargetDateProperty); }
+            set { SetValue(TargetDateProperty, value); }
+        }
+
+        public static readonly BindableProperty TargetDateProperty =
+            BindableProperty.Create(nameof(TargetDate), typeof(DateTime), typeof(LinksView), DateTime.Now, propertyChanged: (b, o, n) =>
+            {
+                if (o == n) return;
                 (b as LinksView)?.UpdateLabelDesign();
             });
 
@@ -56,8 +96,9 @@ namespace BDVideoLibraryManagerXF.Views
         }
 
         public static readonly BindableProperty SpacingProperty =
-            BindableProperty.Create(nameof(Spacing), typeof(Thickness), typeof(LinksView), null, propertyChanged: (b, _, _) =>
+            BindableProperty.Create(nameof(Spacing), typeof(Thickness), typeof(LinksView), null, propertyChanged: (b, o, n) =>
             {
+                if (o == n) return;
                 (b as LinksView)?.UpdateLabelDesign();
             });
 
@@ -84,20 +125,11 @@ namespace BDVideoLibraryManagerXF.Views
         {
             MainStack.Children.Clear();
             if (ItemsSource is null) return;
-
             var fontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label));
             foreach (var item in ItemsSource)
             {
-                var label = new Label()
-                {
-                    Text = item.Text,
-                    TextDecorations = TextDecorations.Underline,
-                    FontSize = fontSize,
-                };
-                label.TextColor = TextColor ?? label.TextColor;
-                label.Margin = Spacing;
-                var tapr = new TapGestureRecognizer();
-                //label.GestureRecognizers.Add( )
+                EventHandler action = null;
+                EventHandler actionOldLink = null;
                 string address = item.TextFull;
 
                 switch (item.Type)
@@ -106,7 +138,7 @@ namespace BDVideoLibraryManagerXF.Views
                         if (!IsDialEnabled) continue;
 
                         {
-                            tapr.Tapped += (_, _) =>
+                            action= (_, _) =>
                             {
                                 try
                                 {
@@ -120,9 +152,29 @@ namespace BDVideoLibraryManagerXF.Views
                         break;
                     case VideoLibraryManagerCommon.Library.LinkedTextType.Http:
                     case VideoLibraryManagerCommon.Library.LinkedTextType.HttpAssumption:
+                        {
+                            action = async (_, _) =>
+                            {
+                                try
+                                {
+                                    await Xamarin.Essentials.Browser.OpenAsync(address);
+                                }
+                                catch { }
+                            };
+                            actionOldLink = async (_, _) =>
+                            {
+                                try
+                                {
+                                    //厳密には色々考えてUTC変換しないといけないが、Xamarinでタイムゾーン系のクラス触るのは危ういので単純減算。
+                                    await Xamarin.Essentials.Browser.OpenAsync($"https://web.archive.org/web/{TargetDate.AddHours(-9).ToString("yyyyMMddHHmmss")}/{address}");
+                                }
+                                catch { }
+                            };
+                        }
+                        break;
                     case VideoLibraryManagerCommon.Library.LinkedTextType.Search:
                         {
-                            tapr.Tapped += async (_, _) =>
+                            action = async (_, _) =>
                             {
                                 try
                                 {
@@ -133,8 +185,70 @@ namespace BDVideoLibraryManagerXF.Views
                         }
                         break;
                 }
-                label.GestureRecognizers.Add(tapr);
-                MainStack.Children.Add(label);
+
+                if (actionOldLink is null || !EnableWebArchive)
+                {
+                    var label = new Label()
+                    {
+                        Text = item.Text,
+                        TextDecorations = TextDecorations.Underline,
+                        FontSize = fontSize,
+                    };
+                    label.TextColor = TextColor ?? label.TextColor;
+                    label.Margin = Spacing;
+                    var tapr = new TapGestureRecognizer();
+                    tapr.Tapped += action;
+                    label.GestureRecognizers.Add(tapr);
+                    MainStack.Children.Add(label);
+                }
+                else
+                {
+                    var label = new Label()
+                    {
+                        FontSize = fontSize,
+                    };
+                    label.TextColor = TextColor ?? label.TextColor;
+                    label.Margin = Spacing;
+                    label.FormattedText = new FormattedString();
+                    {
+                        var span = new Span()
+                        {
+                            Text = item.Text,
+                            TextDecorations = TextDecorations.Underline,
+                        };
+                        var tapr = new TapGestureRecognizer();
+                        tapr.Tapped += action;
+                        span.GestureRecognizers.Add(tapr);
+                        label.FormattedText.Spans.Add(span);
+                    }
+                    {
+                        var span = new Span()
+                        {
+                            Text = " (",
+                        };
+                        label.FormattedText.Spans.Add(span);
+                    }
+                    {
+                        var span = new Span()
+                        {
+                            Text = WebArchiveTitle,
+                            TextDecorations = TextDecorations.Underline,
+                        };
+                        var tapr = new TapGestureRecognizer();
+                        tapr.Tapped += actionOldLink;
+                        span.GestureRecognizers.Add(tapr);
+                        label.FormattedText.Spans.Add(span);
+                    }
+                    {
+                        var span = new Span()
+                        {
+                            Text = ")",
+                        };
+                        label.FormattedText.Spans.Add(span);
+                    }
+
+                    MainStack.Children.Add(label);
+                }
             }
         }
     }

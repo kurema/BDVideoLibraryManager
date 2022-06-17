@@ -50,7 +50,8 @@
                                         <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
                                     </Label.GestureRecognizers>
                                 </Label>
-                                <v:LinksView ItemsSource="{Binding Video.Links}" TextColor="{AppThemeBinding Light=Black,Dark=White,Default=Black}" Spacing="0,5,0,5" IsDialEnabled="True" />
+                                <v:LinksView  EnableWebArchive="True" TargetDate="{Binding Video.RecordDateTime}"
+                                    ItemsSource="{Binding Video.Links}" TextColor="{AppThemeBinding Light=Black,Dark=White,Default=Black}" Spacing="0,5,0,5" IsDialEnabled="True" WebArchiveTitle="放送当時" />
                             </StackLayout>
                         </ScrollView>
                     </DataTemplate>
