@@ -24,7 +24,7 @@
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <StackLayout>
-            <SearchBar x:Name="SearchBar" Placeholder="キーワード" BackgroundColor="White"
+            <SearchBar x:Name="SearchBar" Placeholder="キーワード"
                        Text="{Binding SearchWord}"
                        IsVisible="False" SearchCommand="{Binding SearchCommand}" Unfocused="SearchBar_OnUnfocused"  HeightRequest="40" />
             <StackLayout Orientation="Horizontal" IsVisible="{Binding SearchGenre, Converter={StaticResource IsNotNullOrEmptyValueConverter}}">
