@@ -91,7 +91,7 @@ public static class LibraryStorage
 		//https://github.com/TalAloni/SMBLibrary/blob/master/ClientExamples.md
 		ISMBFileStore fileStore = null;
 
-		if (serverName.Equals("test.example", StringComparison.InvariantCultureIgnoreCase))
+		if (serverName.Equals("test.example", StringComparison.InvariantCultureIgnoreCase) || serverName.EndsWith(".test", StringComparison.InvariantCultureIgnoreCase))
 		{
 			try
 			{
