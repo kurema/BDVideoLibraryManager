@@ -106,7 +106,7 @@ public static class LibraryStorage
 						System.IO.Path.Combine(PathCsvClosed, $"{i:000}.csv"));
 
 			}
-			catch (Exception e)
+			catch
 			{
 				return false;
 			}
