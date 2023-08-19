@@ -30,9 +30,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="SMBLibrary" Version="1.4.8" />
+		<PackageReference Include="SMBLibrary" Version="1.5.0.1" />
 		<PackageReference Include="Xamarin.Forms" Version="5.0.0.2478" />
-		<PackageReference Include="Xamarin.Essentials" Version="1.7.4" />
+		<PackageReference Include="Xamarin.Essentials" Version="1.7.7" />
 	</ItemGroup>
 
 	<ItemGroup>
