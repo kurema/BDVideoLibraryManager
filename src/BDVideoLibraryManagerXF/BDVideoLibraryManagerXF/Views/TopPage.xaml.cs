@@ -28,10 +28,9 @@ namespace BDVideoLibraryManagerXF.Views
 
         private async void ListView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
-            var item = e.SelectedItem as MasterPage.MasterMenuItem;
-            if (item == null)
-                return;
-            if (item.TargetType != null)
+			if (e.SelectedItem is not MasterPage.MasterMenuItem item)
+				return;
+			if (item.TargetType != null)
             {
                 var page = (Page)Activator.CreateInstance(item.TargetType);
                 page.Title = item.Title;
@@ -68,7 +67,7 @@ namespace BDVideoLibraryManagerXF.Views
             }
             if (pl.Count == 0) return;
 
-            Random rd = new Random((int)(DateTime.Now.Date.Ticks / TimeSpan.FromDays(1).Ticks));
+            Random rd = new((int)(DateTime.Now.Date.Ticks / TimeSpan.FromDays(1).Ticks));
             var listFull = pl.OrderBy(a => a.Video.Length.TotalMilliseconds).OrderBy(a => rd.NextDouble()).ToArray();
 
             var page = (Page)Activator.CreateInstance(typeof(Views.VideosDetailPage2), listFull, listFull[0]);

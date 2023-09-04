@@ -16,7 +16,7 @@ namespace BDVideoLibraryManagerXF.ViewModels
         public void OnPropertyChanged(string name) { PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name)); }
 
         public Library FullLibrary { get { return _FullLibrary; } set { _FullLibrary = value; OnPropertyChanged(nameof(Library)); OnPropertyChanged(nameof(FullLibrary)); } }
-        private Library _FullLibrary = new Library(new DiskBD[0]);
+        private Library _FullLibrary = new(new DiskBD[0]);
 
         public Library Library { get { IsBusy = true;  var result= Search(FullLibrary, SearchWord,SearchGenre,TargetDisc);IsBusy = false;return result; } }
 

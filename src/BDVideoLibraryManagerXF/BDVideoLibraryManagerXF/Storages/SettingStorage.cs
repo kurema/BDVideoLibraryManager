@@ -41,9 +41,8 @@ namespace BDVideoLibraryManagerXF.Storages
         {
             get
             {
-                var result = GetProperty("SMBID") as string;
-                if (result == null) return "";
-                return result;
+				if (GetProperty("SMBID") is not string result) return "";
+				return result;
             }
             set
             {
@@ -55,9 +54,8 @@ namespace BDVideoLibraryManagerXF.Storages
         {
             get
             {
-                var result = GetProperty("SMBPath") as string;
-                if (result == null) return "";
-                return result;
+				if (GetProperty("SMBPath") is not string result) return "";
+				return result;
             }
             set
             {
@@ -69,9 +67,8 @@ namespace BDVideoLibraryManagerXF.Storages
         {
             get
             {
-                var result = GetProperty("SMBServerName") as string;
-                if (result == null) return "";
-                return result;
+				if (GetProperty("SMBServerName") is not string result) return "";
+				return result;
             }
             set
             {

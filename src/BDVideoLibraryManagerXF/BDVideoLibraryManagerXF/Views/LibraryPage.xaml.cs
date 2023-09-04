@@ -230,7 +230,7 @@ namespace BDVideoLibraryManagerXF.Views
         }
 
         //検索ボタンクリック時にSearchBarのフォーカスも外れるので強引に時間差で対応。
-        public DateTime SearchBarLastClosedTime = new DateTime();
+        public DateTime SearchBarLastClosedTime = new();
 
         protected override void OnAppearing()
         {

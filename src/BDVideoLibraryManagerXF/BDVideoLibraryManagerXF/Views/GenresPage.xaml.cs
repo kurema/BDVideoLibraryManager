@@ -23,11 +23,10 @@ namespace BDVideoLibraryManagerXF.Views
         {
             if (!(args.SelectedItem is string))
                 return;
-            var item = args.SelectedItem as string;
-            if (item == null)
-                return;
+			if (args.SelectedItem is not string item)
+				return;
 
-            var lp = new LibraryPage();
+			var lp = new LibraryPage();
             lp.TargetGenre = item;
             await Navigation.PushAsync(lp);
 
