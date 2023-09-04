@@ -15,7 +15,7 @@ jobs:
       AndroidAppName: com.github.kurema.BDVideoLibraryManager
       WPFCsprojPath: VideoLibraryManager/VideoLibraryManager.csproj
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v3
 # For Windows    
     - name: Configure Pagefile
       uses: al-cheb/configure-pagefile-action@v1.2
@@ -64,7 +64,7 @@ jobs:
         rm ${{ env.SlnPath }}${{ env.AndroidCsprojPath }}github.keystore
       if: always()
     - name: Updload artifact Android
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: Android App
         path: ${{ env.SlnPath }}${{ env.AndroidCsprojPath }}bin/Release/${{ env.AndroidAppName }}-Signed.*
@@ -124,7 +124,7 @@ jobs:
         asset_name: Windows.zip
         asset_content_type: application/zip
     - name: Updload artifact WPF
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: Windows App
         path: ${{ env.SlnPath }}Win.zip
