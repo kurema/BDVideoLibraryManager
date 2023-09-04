@@ -37,7 +37,7 @@ jobs:
       uses: dawidd6/action-get-tag@v1
     - name: Is tagged version
       id: tagged
-      run: echo 'tagged::yes' >> $GITHUB_OUTPUT
+      run: echo "tagged=yes" >> $GITHUB_OUTPUT
       #https://pione30.hatenablog.com/entry/2021/02/05/015545
       if: contains(github.ref, 'tags/v')
     - name: Require Android package format
@@ -45,9 +45,9 @@ jobs:
       shell: bash
       run: |
         if [ "${{steps.tagged.outputs.tagged}}" = "yes" ]; then
-          echo 'format::aab' >> $GITHUB_OUTPUT
+          echo "format=aab" >> $GITHUB_OUTPUT
         else
-          echo 'format::apk' >> $GITHUB_OUTPUT
+          echo "format=apk" >> $GITHUB_OUTPUT
         fi
     - name: Android
       run: |
