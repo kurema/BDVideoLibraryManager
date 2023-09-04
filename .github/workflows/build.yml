@@ -24,7 +24,7 @@ jobs:
         maximum-size: 32GB
         disk-root: "C:"
     - name: Add msbuild to PATH
-      uses: microsoft/setup-msbuild@v1.0.3
+      uses: microsoft/setup-msbuild@v1.1
     - name: Move directory
       run: Move-Item ${{ env.SlnPathOriginal }} ${{env.SlnPath}}
     - name: Write keystore
@@ -37,7 +37,7 @@ jobs:
       uses: dawidd6/action-get-tag@v1
     - name: Is tagged version
       id: tagged
-      run: echo '::set-output name=tagged::yes'
+      run: echo 'tagged::yes' >> $GITHUB_OUTPUT
       #https://pione30.hatenablog.com/entry/2021/02/05/015545
       if: contains(github.ref, 'tags/v')
     - name: Require Android package format
@@ -45,9 +45,9 @@ jobs:
       shell: bash
       run: |
         if [ "${{steps.tagged.outputs.tagged}}" = "yes" ]; then
-          echo '::set-output name=format::aab'
+          echo 'format::aab' >> $GITHUB_OUTPUT
         else
-          echo '::set-output name=format::apk'
+          echo 'format::apk' >> $GITHUB_OUTPUT
         fi
     - name: Android
       run: |
