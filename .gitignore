@@ -265,3 +265,4 @@ res/model/*.bak
 res/GitHub Actions
 res/v1.x/*.7z
 
+/.github/workflows/build.yml
